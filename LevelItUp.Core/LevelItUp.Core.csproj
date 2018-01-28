@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="5.4.0" />
+    <PackageReference Include="MvvmCross.Plugin.FieldBinding" Version="5.4.0" />
+    <PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="5.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LevelItUp.Model\LevelItUp.Model.csproj" />
+  </ItemGroup>
+
+</Project>
