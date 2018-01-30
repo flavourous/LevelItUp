@@ -15,28 +15,23 @@ namespace LevelItUp.Model.Test.NetFW
         [Test, Order(00100)]
         public void C00100__Level_1_Unfinished_Attributes()
         {
-            AssertParamEquals(a_str, level: 1, value: 3);
-            AssertLevelStats(); // all are none
-            AssertParamChange(a_str, level: 1, change: +4, allowed: true);
-            AssertParamEquals(a_str, level: 1, value: 7);
-            AssertLevelStats
-            (
-                (t_attributes, new[] { (1, LevelStat.TooFewSpent) })
-            );
+            OnLevel = 1;
+            AssertParamEquals(a_str, value: 3);
+            AssertLevelStatus();
+            AssertParamChange(a_str, alter: +4, allowed: true);
+            AssertParamEquals(a_str, value: 7);
+            AssertLevelStatus(t_attributes, LevelStat.TooFewSpent);
         }
         [Test, Order(00200)]
         public void C00200__Level_1_Finished_Attributes()
         {
-            AssertParamChange(a_agi, level: 1, change: +5, allowed: true);
-            AssertParamEquals(a_agi, level: 1, value: 8);
-            AssertParamChange(a_wil, level: 1, change: +5, allowed: true);
-            AssertParamEquals(a_wil, level: 1, value: 8);
-            AssertParamChange(a_dex, level: 1, change: +5, allowed: true);
-            AssertParamEquals(a_dex, level: 1, value: 8);
-            AssertLevelStats
-            (
-                (t_attributes, new[] { (1, LevelStat.Ok) })
-            );
+            AssertParamChange(a_agi, alter: +5, allowed: true);
+            AssertParamEquals(a_agi, value: 8);
+            AssertParamChange(a_wil, alter: +5, allowed: true);
+            AssertParamEquals(a_wil, value: 8);
+            AssertParamChange(a_dex, alter: +5, allowed: true);
+            AssertParamEquals(a_dex, value: 8);
+            AssertLevelStatus(t_attributes, LevelStat.Ok);
         }
         [Test, Order(00300)]
         public void C00300__Level_1_SkillMany_FeatMany()

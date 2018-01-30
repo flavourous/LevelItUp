@@ -30,7 +30,7 @@ namespace LevelItUp.Model
             public void Dispose() => pc.dal.Save(ptype);
 
             // Set Subcategory
-            public void SubCategory(String name = null) => subcat = name;
+            public void SCategory(String name = null) => subcat = name;
             String subcat = null;
 
             // Parameters
@@ -44,12 +44,30 @@ namespace LevelItUp.Model
                     pc = ptc;
                     param = new BuildParameter { Game = pc.pc.game, Name = name, Category = subcat, Type = pc.ptype, Cost = cost };
                 }
-                public BuildParameter NoRequirments()
+                public BuildParameter Commit()
                 {
                     Dispose();
                     return param;
                 }
-                public void Dispose() => pc.pc.dal.Save(param);
+                List<BuildParameterRequiement> bpr = new List<BuildParameterRequiement>();
+                public ParamContext Require(int amount, BuildParameter ofthis, int forthis = 1)
+                {
+                    bpr.Add(new BuildParameterRequiement
+                    {
+                        DAmount = forthis,
+                        Depend = param,
+                        On = ofthis,
+                        Game = pc.pc.game,
+                        OAmount = amount
+                    });
+                    return this;
+                }
+                public void Dispose()
+                {
+                    pc.pc.dal.Save(param);
+                    foreach (var r in bpr)
+                        pc.pc.dal.Save(r);
+                }
             }
 
             // LevelPoints

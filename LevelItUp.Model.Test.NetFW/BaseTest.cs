@@ -18,10 +18,13 @@ namespace LevelItUp.Model.Test.NetFW
             underrail = d_Underrail.Generate(dal);
             manager = new BuildDefinitionManager(dal, underrail);
         }
-        protected void AssertParamEquals(BuildParameter param, int level, int value) => Assert.AreEqual(dal.Get(level, param.Name).Amount, value);
-        protected void AssertParamChange(BuildParameter param, int level, int change, bool allowed)
+
+        protected int OnLevel { get; set; } = 1;
+
+        protected void AssertParamEquals(BuildParameter param, int value, int? level = null) => Assert.AreEqual(dal.Get(level ?? OnLevel, param.Name).Amount, value);
+        protected void AssertParamChange(BuildParameter param, int alter, bool allowed, int? level = null)
         {
-            var del = manager.ChangeRequest(dal.Get(level, param.Name), change);
+            var del = manager.ChangeRequest(dal.Get(level ?? OnLevel, param.Name), alter);
             if(allowed)
             {
                 Assert.IsNotNull(del);
@@ -32,7 +35,11 @@ namespace LevelItUp.Model.Test.NetFW
                 Assert.IsNotNull(del);
             }
         }
-        protected void AssertLevelStats(params (BuildParameterType paramtype, (int level, LevelStat state)[])[] vals)
+        protected void AssertLevelStatus(BuildParameterType paramtype, LevelStat state)
+        {
+            AssertLevelStatus((paramtype, new[] { (OnLevel, state) });
+        }
+        protected void AssertLevelStatus(params (BuildParameterType paramtype, (int level, LevelStat state)[])[] vals)
         {
             var avals = vals.ToDictionary(x => x.paramtype.Name, x => x.Item2.ToDictionary(y=> y.level, y => y.state));
             foreach (var kv in manager.LevelStatus())
