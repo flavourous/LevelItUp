@@ -45,6 +45,7 @@ namespace LevelItUp.Model
     public class BuildParameter : BaseGameModel
     {
         public String Name { get; set; }
+        public String Category { get; set; }
         public BuildParameterType Type { get; set; }
         public int Cost { get; set; }
     }

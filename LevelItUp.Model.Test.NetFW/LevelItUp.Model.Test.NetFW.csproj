@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="PartialUnderspend.cs" />
+    <Compile Include="ConnectedTestRun.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

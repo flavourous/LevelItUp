@@ -12,17 +12,16 @@ namespace LevelItUp.Model.Test.NetFW
         protected FakeDAL dal { get; private set; }
         protected GameBuild underrail { get; private set; }
         protected BuildDefinitionManager manager { get; private set; }
-        [SetUp]
-        public void SetUp()
+        public BaseTest()
         {
             dal = FakeDAL.OurFakeDal();
-            underrail = UnderrailDefinition.Generate(dal);
+            underrail = d_Underrail.Generate(dal);
             manager = new BuildDefinitionManager(dal, underrail);
         }
-        protected void AssertParamEqual(String param, int level, int value) => Assert.AreEqual(dal.Get(level, param).Amount, value);
-        protected void AssertParamChange(String param, int level, int change, bool allowed)
+        protected void AssertParamEquals(BuildParameter param, int level, int value) => Assert.AreEqual(dal.Get(level, param.Name).Amount, value);
+        protected void AssertParamChange(BuildParameter param, int level, int change, bool allowed)
         {
-            var del = manager.ChangeRequest(dal.Get(level, param), change);
+            var del = manager.ChangeRequest(dal.Get(level, param.Name), change);
             if(allowed)
             {
                 Assert.IsNotNull(del);
@@ -33,9 +32,9 @@ namespace LevelItUp.Model.Test.NetFW
                 Assert.IsNotNull(del);
             }
         }
-        protected void AssertLevelStats(params (String paramtype, (int level, LevelStat state)[])[] vals)
+        protected void AssertLevelStats(params (BuildParameterType paramtype, (int level, LevelStat state)[])[] vals)
         {
-            var avals = vals.ToDictionary(x => x.paramtype, x => x.Item2.ToDictionary(y=> y.level, y => y.state));
+            var avals = vals.ToDictionary(x => x.paramtype.Name, x => x.Item2.ToDictionary(y=> y.level, y => y.state));
             foreach (var kv in manager.LevelStatus())
             {
                 var kkn = kv.Key.Name;

@@ -29,16 +29,20 @@ namespace LevelItUp.Model
             }
             public void Dispose() => pc.dal.Save(ptype);
 
+            // Set Subcategory
+            public void SubCategory(String name = null) => subcat = name;
+            String subcat = null;
+
             // Parameters
-            public ParamContext Parameter(String name, int cost = 1) => new ParamContext(this, name, cost);
+            public ParamContext Parameter(String name, int cost = 1) => new ParamContext(this, name, subcat, cost);
             public class ParamContext : IDisposable
             {
                 readonly PTypeContext pc;
                 public readonly BuildParameter param;
-                public ParamContext(PTypeContext ptc, String name, int cost)
+                public ParamContext(PTypeContext ptc, String name, String subcat, int cost)
                 {
                     pc = ptc;
-                    param = new BuildParameter { Game = pc.pc.game, Name = name, Type = pc.ptype, Cost = cost };
+                    param = new BuildParameter { Game = pc.pc.game, Name = name, Category = subcat, Type = pc.ptype, Cost = cost };
                 }
                 public BuildParameter NoRequirments()
                 {
