@@ -21,37 +21,60 @@ namespace LevelItUp.Model.Test.NetFW
 
         protected int OnLevel { get; set; } = 1;
 
-        protected void AssertParamEquals(BuildParameter param, int value, int? level = null) => Assert.AreEqual(dal.Get(level ?? OnLevel, param.Name).Amount, value);
-        protected void AssertParamChange(BuildParameter param, int alter, bool allowed, int? level = null)
+        protected void AssertParamChEqul(BuildParameter param, int change, int value, bool allfollowing = true)
         {
-            var del = manager.ChangeRequest(dal.Get(level ?? OnLevel, param.Name), alter);
-            if(allowed)
+            AssertParamChange(param, change);
+            AssertParamEquals(param, value);
+        }
+        protected void AssertParamNeeded(BuildParameter param, BuildParameter need, int more, int? level = null)
+        {
+            var lv = level ?? OnLevel;
+            manager.MissingRequirments(dal.Get(lv, param))
+                   .Where(x => x.Any(y => y.param.id == need.id && y.amount == more))
+                   .Any();
+        }
+        protected void AssertParamEquals(BuildParameter param, int value, int? level = null) => Assert.AreEqual(dal.Get(level ?? OnLevel, param).Amount, value);
+        protected void AssertParamChange(BuildParameter param, int alter, bool allowed = true, int? level = null, bool allfollowing = true)
+        {
+            for (int i = level ?? OnLevel; i <= param.Game.MaxLevel; i++)
             {
-                Assert.IsNotNull(del);
-                del();
+                var del = manager.ChangeRequest(dal.Get(i, param), alter);
+                if (allowed)
+                {
+                    Assert.IsNotNull(del);
+                    del();
+                }
+                else
+                {
+                    Assert.IsNull(del);
+                    break; // only first tiem will be disapplows.
+                }
             }
-            else
-            {
-                Assert.IsNotNull(del);
-            }
+        }
+        protected void AssertNoLevelStatus()
+        {
+            AssertLevelStatus(Enumerable.Empty<(BuildParameterType paramtype, LevelStat state)>().ToArray());
         }
         protected void AssertLevelStatus(BuildParameterType paramtype, LevelStat state)
         {
-            AssertLevelStatus((paramtype, new[] { (OnLevel, state) });
+            AssertLevelStatus(OnLevel, (paramtype, state));
         }
-        protected void AssertLevelStatus(params (BuildParameterType paramtype, (int level, LevelStat state)[])[] vals)
+        protected void AssertLevelStatus(params (BuildParameterType paramtype, LevelStat state)[] p)
         {
-            var avals = vals.ToDictionary(x => x.paramtype.Name, x => x.Item2.ToDictionary(y=> y.level, y => y.state));
-            foreach (var kv in manager.LevelStatus())
+            AssertLevelStatus(OnLevel, p);
+        }
+        protected void AssertLevelStatus(int level, params (BuildParameterType paramtype, LevelStat state)[] p)
+        {
+            var avals = p.ToDictionary(x => x.paramtype.id, x => x.Item2);
+            foreach (var kv in manager.LevelStatus(level))
             {
-                var kkn = kv.Key.Name;
-                var ld = avals.ContainsKey(kkn) ? avals[kkn] : new Dictionary<int, LevelStat>();
-                for (int i = 0; i < kv.Value.Length; i++)
-                {
-                    var use = ld.ContainsKey(i+1) ? ld[i+1] : LevelStat.None;
-                    Assert.AreEqual(kv.Value[i], use, String.Format("{0} at level {1}", kkn, i+1));
-                }
+                var use = avals.ContainsKey(kv.Key.id) ? avals[kv.Key.id] : LevelStat.None;
+                Assert.AreEqual(kv.Value, use, String.Format("{2} {0} at level {1}", kv.Key.Name, level, Spent(kv.Key, level)));
             }
+        }
+        int Spent(BuildParameterType p, int level)
+        {
+            return dal.Get<BuildLevelParameter>().Where(x => x.Level == level && x.Parameter.Type.id == p.id).Sum(x => x.Amount*x.Parameter.Cost);
         }
     }
 }

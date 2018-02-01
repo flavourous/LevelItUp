@@ -25,7 +25,7 @@ namespace LevelItUp.Model
             buildParams = dal.Get<BuildParameter>()
                              .ToList()
                              .Where(x => x.Game.id == build.Game.id)
-                             .SelectMany(x => Enumerable.Range(1, 25).Select(i =>
+                             .SelectMany(x => Enumerable.Range(1, game.MaxLevel).Select(i =>
                                               {
                                                  // get or create the levelparameter
                                                  var b = blp.FirstOrDefault(l => l.Parameter.id == x.id && l.Level == i);
@@ -48,15 +48,32 @@ namespace LevelItUp.Model
 
         public Action ChangeRequest(BuildLevelParameter param, int amount)
         {
-            var levelRules = dal.Get<BuildParameterTypeLevelPoints>().Single(x => x.Type.id == param.Parameter.Type.id && x.Level == param.Level);
+            // breaking type level max limit?
             var newVal = param.Amount + amount;
-            if (newVal < param.Parameter.Type.Minimum || newVal > levelRules.Limit)
-                return null; // That would never be possible.
+            var lRule = dal.Get<BuildParameterTypeLevelPoints>()
+                           .Where(x => x.Type.id == param.Parameter.Type.id)
+                           .Where(x => x.Level == param.Level)
+                           .Single();
+
+            if (newVal > lRule.Limit)
+                return null;
 
             var prevLevelVal = GetPreviousLevel(param).Amount;
             if (newVal < prevLevelVal && amount < 0)
                 return null; // neither would that really.
 
+            // check level restrictions
+            var ldep = dal.Get<BuildParameterRequiement>()
+                          .Where(x => x.Depend.id == param.Parameter.id)
+                          .Where(x => x.On == null)
+                          .ToArray();
+
+            // Cant be picked/pushed that far at this level, ever.
+            if (ldep.Where(x => newVal >= x.DAmount)
+                    .Where(x => param.Level < x.OAmount)
+                    .Any()) return null;
+               
+            // ok you could...
             return () =>
             {
                 param.Amount += amount;
@@ -72,48 +89,50 @@ namespace LevelItUp.Model
         }
 
         
-        public Dictionary<BuildParameterType, LevelStat[]> LevelStatus()
+        public Dictionary<BuildParameterType, LevelStat> LevelStatus(int lvl)
         {
-            Dictionary<BuildParameterType, LevelStat[]> dret = new Dictionary<BuildParameterType, LevelStat[]>();
+            Dictionary<BuildParameterType, LevelStat> dret = new Dictionary<BuildParameterType, LevelStat>();
+            if (lvl > build.Game.MaxLevel || lvl < 1) return dret;
+            var levelParams = buildParams.Where(x => x.Level == lvl).ToList();
             foreach (var tp in dal.Get<BuildParameterType>().Where(x => x.Game.id == build.Game.id))
             {
-                List<LevelStat> r = new List<LevelStat>();
-                for (int i = 1; i <= build.Game.MaxLevel; i++)
+                var typeLevelParams = levelParams.Where(x => x.Parameter.Type.id == tp.id).ToList();
+                var prevLevel = typeLevelParams.Select(x => GetPreviousLevel(x));
+                // minimum and limit have been processed
+                // first, has nothing been done? dont panic then.
+                var diff = typeLevelParams.Join(prevLevel, x => x.Parameter.id, x => x.Parameter.id, (l, p) => l.Parameter.Cost * (l.Amount - p.Amount)).Sum();
+                var must = dal.Get<BuildParameterTypeLevelPoints>().SingleOrDefault(x => x.Type.id == tp.id && x.Level == lvl)?.Amount ?? 0;
+                if (diff==0) dret[tp]= LevelStat.None;
+                else if (diff > must) dret[tp] = LevelStat.TooManySpent;
+                else if (diff < must) dret[tp] = LevelStat.TooFewSpent;
+                else
                 {
-                    var levelParams = buildParams.Where(x => x.Level == i && x.Parameter.Type.id == tp.id).ToList();
-                    var prevLevel = levelParams.Select(x => GetPreviousLevel(x));
-                    // minimum and limit have been processed
-                    // first, has nothing been done? dont panic then.
-                    var diff = levelParams.Join(prevLevel, x => x.Parameter.id, x => x.Parameter.id, (l, p) => l.Amount - p.Amount).Sum();
-                    var must = dal.Get<BuildParameterTypeLevelPoints>().SingleOrDefault(x => x.Type.id == tp.id && x.Level == i)?.Amount ?? 0;
-                    if (levelParams.All(x=>x.Amount == x.Parameter.Type.Minimum))
-                        r.Add(LevelStat.None);
-                    else if (diff > must) r.Add(LevelStat.TooManySpent);
-                    else if (diff < must) r.Add(LevelStat.TooFewSpent);
-                    else
-                    {
-                        // check if requirments are met
-                        var reqs = dal.Get<BuildParameterRequiement>()
-                                      .Where(x => levelParams.Any(p => p.Parameter.id == x.Depend.id && p.Amount >= x.DAmount));
-                        if (reqs.Any(x => (levelParams.Single(l => l.Parameter.id == x.On.id).Amount < x.OAmount)))
-                            r.Add(LevelStat.RequirmentsNotMet);
-                        else r.Add(LevelStat.Ok); // no problem.
-                    }
+                    // check if requirments are met
+                    var reqs = dal.Get<BuildParameterRequiement>()
+                                  .Where(x => x.On != null) //level restrictions already dealt with
+                                  .Where(x => typeLevelParams.Any(p => p.Parameter.id == x.Depend.id && p.Amount >= x.DAmount));
+                    Func<BuildParameterRequiement, int> reqAmt = x => levelParams.Single(l => l.Parameter.id == x.On.id).Amount;
+                    if (reqs.GroupBy(x => x.OrGroup)
+                            .Any(y => y.All(x => reqAmt(x) < x.OAmount ^ x.Not)))
+                        dret[tp] = LevelStat.RequirmentsNotMet;
+                    else dret[tp] = LevelStat.Ok; // no problem.
                 }
-                dret[tp] = r.ToArray();
             }
             return dret;
         }
 
-        public (int amount, BuildParameter param)[] MissingRequirments(BuildLevelParameter plevel)
+        public (int amount, BuildParameter param)[][] MissingRequirments(BuildLevelParameter plevel)
         {
             var levelParams = buildParams.Where(x => x.Level == plevel.Level);
+            Func<BuildParameter, int> lAmount = p => 
+                levelParams.Single(l => l.Parameter.id == p.id).Amount;
             return dal.Get<BuildParameterRequiement>()
-                      .Where(x => x.Depend.id == plevel.Parameter.id)
-                      .Where(x => plevel.Amount >= x.DAmount)
-                      .Select(x => (x.OAmount - levelParams.Single(l => l.Parameter.id == x.On.id).Amount, x.On))
-                      .Where(x => x.Item1 > 0)
-                      .ToArray();
+                      .Where(x => x.Depend.id == plevel.Parameter.id)//match
+                      .Where(x => plevel.Amount >= x.DAmount) // the req is for above an amount
+                      .GroupBy(x => x.OrGroup, x=> (x.OAmount - lAmount(x.On), x.On, x.Not))// inside group is or
+                      .Where(x => x.All(y => y.Item1 > 0)) // all OR are missing
+                      .Select(x=>x.Select(y=>(y.Item1, y.Item2)).ToArray()) // arrayu or grps
+                      .ToArray();//array all
         }
     }
 }

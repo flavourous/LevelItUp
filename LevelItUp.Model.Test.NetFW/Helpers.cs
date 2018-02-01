@@ -8,9 +8,9 @@ namespace LevelItUp.Model.Test.NetFW
 {
     public static class TestDallHelp
     {
-        public static BuildLevelParameter Get(this FakeDAL dal, int level, String name)
+        public static BuildLevelParameter Get(this FakeDAL dal, int level, BuildParameter param)
         {
-            return dal.Get<BuildLevelParameter>().Single(x => x.Parameter.Name == name && x.Level == level);
+            return dal.Get<BuildLevelParameter>().Single(x => x.Parameter.id == param.id && x.Level == level);
         }
     }
 }

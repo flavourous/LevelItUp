@@ -53,8 +53,12 @@ namespace LevelItUp.Model
     // e.g. "featy" requires level 12, 4 strength, 25 kilzor and feats feat1 and feat2
     public class BuildParameterRequiement : BaseGameModel
     {
+        public String OrGroup { get; set; }
+
         public BuildParameter Depend { get; set; }
         public int DAmount { get; set; }
+
+        public bool Not { get; set; }
 
         public BuildParameter On { get; set; } // null for level requiemnt...
         public int OAmount { get; set; }

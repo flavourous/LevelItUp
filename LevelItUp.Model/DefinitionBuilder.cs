@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LevelItUp.Model
@@ -50,15 +51,40 @@ namespace LevelItUp.Model
                     return param;
                 }
                 List<BuildParameterRequiement> bpr = new List<BuildParameterRequiement>();
+                public ParamContext OrRequire(int amount, BuildParameter ofthis)
+                {
+                    return Dor(amount, ofthis, false);
+                }
+                public ParamContext OrExclude(int amount, BuildParameter ofthis)
+                {
+                    return Dor(amount, ofthis, true);
+                }
+                public ParamContext Dor(int amount, BuildParameter ofthis, bool not)
+                {
+                    var g = bpr.Last();
+                    Dep(amount, ofthis, g.DAmount, not);
+                    bpr.Last().OrGroup = g.OrGroup;
+                    return this;
+                }
                 public ParamContext Require(int amount, BuildParameter ofthis, int forthis = 1)
+                {
+                    return Dep(amount, ofthis, forthis, false);
+                }
+                public ParamContext Exclude(int amount, BuildParameter ofthis, int forthis = 1)
+                {
+                    return Dep(amount, ofthis, forthis, true);
+                }
+                public ParamContext Dep(int amount, BuildParameter ofthis, int forthis, bool not)
                 {
                     bpr.Add(new BuildParameterRequiement
                     {
+                        OrGroup = Guid.NewGuid().ToString(),
                         DAmount = forthis,
                         Depend = param,
                         On = ofthis,
                         Game = pc.pc.game,
-                        OAmount = amount
+                        OAmount = amount,
+                        Not = not
                     });
                     return this;
                 }
@@ -71,15 +97,15 @@ namespace LevelItUp.Model
             }
 
             // LevelPoints
-            public void LevelPoint(int level, int amount, int limit)
+            public void LevelPoints(int level, int amount, int limit)
             {
                 var pl = new BuildParameterTypeLevelPoints
                 {
                     Game = pc.game,
                     Type = ptype,
+                    Limit = limit,
                     Amount = amount,
                     Level = level,
-                    Limit = limit,
                 };
                 pc.dal.Save(pl);
             }
