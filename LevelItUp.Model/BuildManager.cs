@@ -102,7 +102,7 @@ namespace LevelItUp.Model
                 // first, has nothing been done? dont panic then.
                 var diff = typeLevelParams.Join(prevLevel, x => x.Parameter.id, x => x.Parameter.id, (l, p) => l.Parameter.Cost * (l.Amount - p.Amount)).Sum();
                 var must = dal.Get<BuildParameterTypeLevelPoints>().SingleOrDefault(x => x.Type.id == tp.id && x.Level == lvl)?.Amount ?? 0;
-                if (diff==0) dret[tp]= LevelStat.None;
+                if (diff == 0) dret[tp] = must == 0 ? LevelStat.Ok : LevelStat.None;
                 else if (diff > must) dret[tp] = LevelStat.TooManySpent;
                 else if (diff < must) dret[tp] = LevelStat.TooFewSpent;
                 else
@@ -124,15 +124,15 @@ namespace LevelItUp.Model
         public (int amount, BuildParameter param)[][] MissingRequirments(BuildLevelParameter plevel)
         {
             var levelParams = buildParams.Where(x => x.Level == plevel.Level);
-            Func<BuildParameter, int> lAmount = p => 
+            Func<BuildParameter, int> lAmount = p => p == null ? plevel.Level :
                 levelParams.Single(l => l.Parameter.id == p.id).Amount;
-            return dal.Get<BuildParameterRequiement>()
-                      .Where(x => x.Depend.id == plevel.Parameter.id)//match
-                      .Where(x => plevel.Amount >= x.DAmount) // the req is for above an amount
-                      .GroupBy(x => x.OrGroup, x=> (x.OAmount - lAmount(x.On), x.On, x.Not))// inside group is or
-                      .Where(x => x.All(y => y.Item1 > 0)) // all OR are missing
-                      .Select(x=>x.Select(y=>(y.Item1, y.Item2)).ToArray()) // arrayu or grps
-                      .ToArray();//array all
+            var deps = dal.Get<BuildParameterRequiement>()
+                          .Where(x => x.Depend.id == plevel.Parameter.id);//match
+            var abv = deps.Where(x => plevel.Amount >= x.DAmount); // the req is for above an amount
+            var org = abv.GroupBy(x => x.OrGroup, x => (x.OAmount - lAmount(x.On), x.On, x.Not));// inside group is or
+            var ret = org.Where(x => x.All(y => y.Item1 > 0)) // all OR are missing
+                         .Select(x => x.Select(y => (y.Item1, y.Item2)).ToArray()); // arrayu or grps
+            return ret.ToArray();
         }
     }
 }

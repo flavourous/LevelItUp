@@ -8,16 +8,15 @@ using static LevelItUp.Model.d_Underrail;
 
 namespace LevelItUp.Model.Test.NetFW
 {
-
     [TestFixture]
-    public class ConnectedTestRun : BaseTest
+    public class MyFirstUnderrailBuild : BaseTest
     {
         [Test, Order(00100)]
         public void c00100__Level_1_Unfinished_Attributes()
         {
             OnLevel = 1;
             AssertParamEquals(a_str, value: 3);
-            AssertNoLevelStatus();
+            AssertLevelStatus();
             AssertParamChEqul(a_str, +3, 6);
             AssertLevelStatus(t_attributes, LevelStat.TooFewSpent);
         }
@@ -113,14 +112,15 @@ namespace LevelItUp.Model.Test.NetFW
             AssertParamNeeded(f_tranquility, f_psychosis, -1);
             AssertParamChEqul(f_tranquility, -1, 0);
             OnLevel = 2;
-            AssertLevelStatus((t_feats, LevelStat.Ok));
+            AssertParamChEqul(f_psychosis, -1, 0);
+            AssertLevelStatus();
         }
         [Test, Order(00900)]
         public void c00900__Level_2_to_10_and_SharpShooter_Dependency()
         {
             var sPump = new[] { s_guns, s_metathermics, s_dodge, s_evasion,
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
-            var fChoose = new[] { f_psychosis, f_interloper, f_point_shot, f_point_shot,
+            var fChoose = new[] { f_psychosis, f_interloper, f_snooping, f_point_shot,
                 f_kneecap_shot, f_premeditation, f_rapid_fire, f_thermodynamicity, f_sharpshooter };
             for (int i = 2; i <= 10; i++)
             {
@@ -144,12 +144,11 @@ namespace LevelItUp.Model.Test.NetFW
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
             var fChoose = new[]
             {
-                f_mental_subversion, f_hypothermia, f_psychostatic_electricity, 
-                f_cryogenic_induction, f_psychosis, f_psionic_mania,
+                f_mental_subversion, f_hypothermia, f_psychostatic_electricity,
+                f_cryogenic_induction, f_suppressive_fire, f_psionic_mania,
                 f_telekinetic_undulation, f_neural_overclocking, f_critical_power,
-                f_premeditation, f_locus_of_control, f_pack_rathound,
-                f_opportunist, f_thermodynamicity
-
+                f_pack_rathound, f_opportunist,f_hit_and_run ,
+                f_locus_of_control, f_cerebral_trauma, f_quick_pockets
             };
             for (int i = 11; i<=25; i++)
             {

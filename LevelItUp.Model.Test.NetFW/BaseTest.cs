@@ -36,25 +36,23 @@ namespace LevelItUp.Model.Test.NetFW
         protected void AssertParamEquals(BuildParameter param, int value, int? level = null) => Assert.AreEqual(dal.Get(level ?? OnLevel, param).Amount, value);
         protected void AssertParamChange(BuildParameter param, int alter, bool allowed = true, int? level = null, bool allfollowing = true)
         {
-            for (int i = level ?? OnLevel; i <= param.Game.MaxLevel; i++)
+            int start = level ?? OnLevel;
+            for (int i = start; i <= param.Game.MaxLevel; i++)
             {
                 var del = manager.ChangeRequest(dal.Get(i, param), alter);
                 if (allowed)
                 {
-                    Assert.IsNotNull(del);
+                    Assert.IsNotNull(del, "{0} {1} not allowed lvl {3}->{2}", param.Name, alter, i,start);
                     del();
                 }
                 else
                 {
-                    Assert.IsNull(del);
+                    Assert.IsNull(del, "{0} {1} actually is allowed lvl {2}", param.Name, alter, start);
                     break; // only first tiem will be disapplows.
                 }
             }
         }
-        protected void AssertNoLevelStatus()
-        {
-            AssertLevelStatus(Enumerable.Empty<(BuildParameterType paramtype, LevelStat state)>().ToArray());
-        }
+        
         protected void AssertLevelStatus(BuildParameterType paramtype, LevelStat state)
         {
             AssertLevelStatus(OnLevel, (paramtype, state));
@@ -68,8 +66,8 @@ namespace LevelItUp.Model.Test.NetFW
             var avals = p.ToDictionary(x => x.paramtype.id, x => x.Item2);
             foreach (var kv in manager.LevelStatus(level))
             {
-                var use = avals.ContainsKey(kv.Key.id) ? avals[kv.Key.id] : LevelStat.None;
-                Assert.AreEqual(kv.Value, use, String.Format("{2} {0} at level {1}", kv.Key.Name, level, Spent(kv.Key, level)));
+                var use = avals.ContainsKey(kv.Key.id) ? new[] { avals[kv.Key.id] } : new[] { LevelStat.Ok, LevelStat.None };
+                Assert.IsTrue(use.Any(x => x == kv.Value), String.Format("{2} {0} at level {1}", kv.Key.Name, level, Spent(kv.Key, level)));
             }
         }
         int Spent(BuildParameterType p, int level)
