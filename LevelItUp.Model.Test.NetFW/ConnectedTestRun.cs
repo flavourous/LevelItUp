@@ -121,8 +121,8 @@ namespace LevelItUp.Model.Test.NetFW
         {
             var sPump = new[] { s_guns, s_metathermics, s_dodge, s_evasion,
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
-            var fChoose = new[] { f_psychosis, f_interloper, f_snooping, f_point_shot,
-                f_kneecap_shot, f_premeditation, f_rapid_fire, f_thermodynamicity, f_sharpshooter };
+            var fChoose = new[] { f_psychosis, f_ninja_looter, f_snooping, f_nimble,
+                f_kneecap_shot, f_recklessness, f_rapid_fire, f_thermodynamicity, f_sharpshooter };
             for (int i = 2; i <= 10; i++)
             {
                 OnLevel = i;

@@ -45,8 +45,40 @@ namespace LevelItUp.Model
                     pc = ptc;
                     param = new BuildParameter { Game = pc.pc.game, Name = name, Category = subcat, Type = pc.ptype, Cost = cost };
                 }
+                public ParamContext ImplyLevelReq()
+                {
+                    // add/update level requirments for niceness
+                    var nnlr = bpr.Where(x => x.On != null);
+                    if (nnlr.Any())
+                    {
+                        var lrq = bpr.FirstOrDefault(x => x.On == null);
+                        var nlv = nnlr.Max(r =>
+                        {
+                            var past = pc.pc.dal.Get<BuildParameterTypeLevelPoints>()
+                                                .Where(x => x.Type.id == r.On.Type.id)
+                                                .Where(x => x.Limit >= r.OAmount);
+                            if (past.Count() > 0)
+                                return past.OrderBy(x => x.Level).First().Level;
+                            return 0;
+                        });
+                        if (lrq != null) lrq.OAmount = Math.Max(lrq.OAmount, nlv);
+                        else bpr.Add(new BuildParameterRequiement
+                        {
+                            Depend = param,
+                            DAmount = 1,
+                            OrGroup = Guid.NewGuid().ToString(),
+                            Game = pc.pc.game,
+                            Not = false,
+                            On = null,
+                            OAmount = nlv
+                        });
+                    }
+                    return this;
+                }
                 public BuildParameter Commit()
                 {
+                    
+
                     Dispose();
                     return param;
                 }
