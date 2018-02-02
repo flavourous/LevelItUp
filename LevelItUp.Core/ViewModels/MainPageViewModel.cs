@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using LevelItUp.Model;
 
 namespace LevelItUp.Core.ViewModels
 {
@@ -15,10 +16,13 @@ namespace LevelItUp.Core.ViewModels
         public MainPageViewModel(IMvxNavigationService navigationService)
         {
             this.navigationService = navigationService;
-            ViewBuildCommand = new MvxAsyncCommand(async () => await this.navigationService.Navigate(SelectedBuild.Value));
+            ViewGameCommand = new MvxAsyncCommand(async () => await this.navigationService.Navigate(SelectedGame.Value), () => SelectedGame.Value != null);
+            var dal = FakeDAL.OurFakeDal();
+            var underrail = d_Underrail.Generate(dal);
+            Games.Value.Add(new GameViewModel(navigationService, dal, underrail));
         }
-        public INC<BuildViewModel> SelectedBuild = new NC<BuildViewModel>();
-        public INCList<BuildViewModel> Builds = new NCList<BuildViewModel>();
-        public IMvxAsyncCommand ViewBuildCommand { get; private set; }
+        public INC<GameViewModel> SelectedGame = new NC<GameViewModel>();
+        public INCList<GameViewModel> Games = new NCList<GameViewModel>();
+        public IMvxAsyncCommand ViewGameCommand { get; private set; }
     }
 }

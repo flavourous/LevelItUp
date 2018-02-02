@@ -16,7 +16,9 @@ namespace LevelItUp.Model.Test.NetFW
         {
             dal = FakeDAL.OurFakeDal();
             underrail = d_Underrail.Generate(dal);
-            manager = new BuildDefinitionManager(dal, underrail);
+            var build = new Build { Name = "New Build", Game = underrail };
+            dal.Save(build);
+            manager = new BuildDefinitionManager(dal, underrail, build);
         }
 
         protected int OnLevel { get; set; } = 1;
