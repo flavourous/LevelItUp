@@ -90,6 +90,7 @@ namespace LevelItUp.Model.Test.NetFW
             AssertParamChEqul(f_aimed_shot, +1, 1);
             AssertParamChange(f_heavyweight, +1, false); // not met at level possible
             AssertParamChEqul(f_psi_empathy, +1, 1); // free
+            AssertParamChange(f_psi_empathy, +1, false); // ..but you cant have 2
 
             AssertLevelStatus
             (

@@ -38,6 +38,15 @@ namespace LevelItUp.Model
                                      f_deadly_snares, f_elemental_bolts, f_locus_of_control, f_super_slam, f_commando, f_eviscerate, f_split_spare, f_heavyweight, f_psi_empathy, f_fisherman,
                                      f_hunter, f_echoing_soliloquy;
 
+        // Psi-abilities (have skill deps and feat deps on them)
+        public static BuildParameterType t_psi_abilities;
+        public static BuildParameter p_neural_overload, p_frighten, p_mental_breakdown, p_billocation, p_psi_cognitive_interruption,
+                                     p_enrage, p_psuedo_spatial_projection, p_neurovisual_disruption,
+                                     p_telekenitic_punch, p_force_field, p_telekinetic_proxy, p_force_emission,
+                                     p_disruptive_field, p_implosion, p_electrokinesis, p_electrokinetic_imprint,
+                                     p_pyrokinesis, p_pyrokinetic_stream, p_exothermic_aura, p_thermodynamic_destabilisation,
+                                     p_cryokinesis, p_cryostasis, p_cryokinetic_orb, p_cryo_shield;
+
         public static GameBuild Generate(FakeDAL dal)
         {
             // or something
@@ -152,8 +161,8 @@ namespace LevelItUp.Model
                     var b_tranquility = feats.Parameter("Tranquility");
                     f_psychosis = b_psychosis.Commit();
                     f_tranquility = b_tranquility.Commit();
-                    b_tranquility.Exclude(1, f_psychosis).Commit();
-                    b_psychosis.Exclude(1, f_tranquility).Commit();
+                    b_tranquility.Require(1, f_psi_empathy).Exclude(1, f_psychosis).Commit();
+                    b_psychosis.Require(1, f_psi_empathy).Exclude(1, f_tranquility).Commit();
                     f_pummel = feats.Parameter("Pummel").Require(20,s_melee).Commit();
                     f_yell = feats.Parameter("Yell").Require(20,s_intimidation).Commit();
 
@@ -196,50 +205,88 @@ namespace LevelItUp.Model
                     f_hypothermia = feats.Parameter("Hypothermia").Require(40,s_metathermics).Commit();
                     f_mad_chemist = feats.Parameter("Mad Chemist").Require(7,a_int).Require(40,s_chemistry).Commit();
                     f_pinning = feats.Parameter("Pinning").Require(7,a_dex).Require(40,s_throwing).Commit();
-                    f_premeditation = feats.Parameter("Premeditation").Require(6,a_int).Require(40,s_thoughtcontrol).OrRequire(40,s_metathermics).OrRequire(40,s_psychokinesis).Commit();
+                    f_premeditation = feats.Parameter("Premeditation").Require(6,a_int).Require(1, f_psi_empathy).Require(40,s_thoughtcontrol).OrRequire(40,s_metathermics).OrRequire(40,s_psychokinesis).Commit();
                     f_psychostatic_electricity = feats.Parameter("Psychostatic Electricity").Require(40,s_psychokinesis).Commit();
                     f_uncanny_dodge = feats.Parameter("Uncanny Dodge").Require(8,a_agi).Require(40,s_dodge).Commit();
                     f_wrestling = feats.Parameter("Wrestling").Require(40,s_melee).Require(7,a_str).Commit();
 
-                    f_bone_breaker = feats.Parameter("Bone Breaker").Commit();
-                    f_cryogenic_induction = feats.Parameter("Cryogenic Induction").Commit();
-                    f_evasive_maneuvers = feats.Parameter("Evasive Maneuvers").Commit();
-                    f_fatal_throw = feats.Parameter("Fatal Throw").Commit();
-                    f_guard = feats.Parameter("Guard").Commit();
-                    f_psionic_mania = feats.Parameter("Psionic Mania").Commit();
-                    f_rapid_fire = feats.Parameter("Rapid Fire").Commit();
-                    f_ripper = feats.Parameter("Ripper").Commit();
-                    f_spec_ops = feats.Parameter("Spec Ops").Commit();
-                    f_special_tactics = feats.Parameter("Special Tactics").Commit();
-                    f_taste_for_blood = feats.Parameter("Taste for Blood").Commit();
-                    f_three_pointer = feats.Parameter("Three Pointer").Commit();
+                    f_bone_breaker = feats.Parameter("Bone Breaker").Require(7,a_str).Require(45,s_melee).Commit();
+                    f_cryogenic_induction = feats.Parameter("Cryogenic Induction").Require(50,s_metathermics).Commit();
+                    f_evasive_maneuvers = feats.Parameter("Evasive Maneuvers").Require(6,a_agi).Require(50,s_evasion).Commit();
+                    f_fatal_throw = feats.Parameter("Fatal Throw").Require(8,a_dex).Require(50,s_throwing).Commit();
+                    f_guard = feats.Parameter("Guard").Require(8,t_level).Require(7,a_str).Require(50,s_melee).Commit();
+                    f_psionic_mania = feats.Parameter("Psionic Mania").Require(8,a_wil).Require(50,s_thoughtcontrol).OrRequire(50,s_metathermics).OrRequire(50,s_psychokinesis).Commit();
+                    f_rapid_fire = feats.Parameter("Rapid Fire").Require(50,s_guns).Commit();
+                    f_ripper = feats.Parameter("Ripper").Require(10,a_dex).Require(5,a_wil).Require(50,s_melee).OrRequire(50,s_throwing).Commit();
+                    f_spec_ops = feats.Parameter("Spec Ops").Require(6,a_agi).Require(50,s_guns).Commit();
+                    f_special_tactics = feats.Parameter("Special Tactics").Require(6,a_int).Require(50,s_crossbows).Commit();
+                    f_taste_for_blood = feats.Parameter("Taste for Blood").Require(50,s_melee).Commit();
+                    f_three_pointer = feats.Parameter("Three Pointer").Require(7,a_dex).Require(50,s_throwing).Commit();
 
-                    f_cut_throat = feats.Parameter("Cut Throat").Commit();
-                    f_telekinetic_undulation = feats.Parameter("Telekinetic Undulation").Commit();
-                    f_blitz = feats.Parameter("Blitz").Commit();
-                    f_concentrated_fire = feats.Parameter("Concentrated Fire").Commit();
+                    f_cut_throat = feats.Parameter("Cut Throat").Require(10,a_dex).Require(55,s_melee).Require(45,s_stealth).Commit();
+                    f_telekinetic_undulation = feats.Parameter("Telekinetic Undulation").Require(5,a_wil).Commit();
+                    f_blitz = feats.Parameter("Blitz").Require(10,t_level).Require(10,a_agi).Commit();
+                    f_concentrated_fire = feats.Parameter("Concentrated Fire").Require(8,a_per).Require(60,s_guns).Commit();
                     f_sharpshooter = feats.Parameter("Sharpshooter").Require(60, s_guns).OrRequire(60, s_crossbows).Require(1, f_aimed_shot).Require(10, a_per).Commit();
 
-                    f_combo = feats.Parameter("Combo").Commit();             
-                    f_neural_overclocking = feats.Parameter("Neural Overclocking").Commit();
-                    f_execute = feats.Parameter("Execute").Commit();
+                    f_combo = feats.Parameter("Combo").Require(8,a_dex).Require(65,s_melee).Commit();             
+                    f_neural_overclocking = feats.Parameter("Neural Overclocking").Require(10,a_wil).Require(1, f_psi_empathy).Require(65,s_metathermics).OrRequire(65,s_thoughtcontrol).OrRequire(65, s_psychokinesis).Commit();
+                    f_execute = feats.Parameter("Execute").Require(70,s_guns).Require(1,f_opportunist).Commit();
 
-                    f_critical_power = feats.Parameter("Critical Power").Commit();
-                    f_deadly_snares = feats.Parameter("Deadly Snares").Commit();
-                    f_elemental_bolts = feats.Parameter("Elemental Bolts").Commit();
-                    f_locus_of_control = feats.Parameter("Locus of Control").Commit();
-                    f_super_slam = feats.Parameter("Super Slam").Commit();
-                    f_commando = feats.Parameter("Commando").Commit();
-                    f_eviscerate = feats.Parameter("Eviscerate").Commit();
-                    f_split_spare = feats.Parameter("Split Spare").Commit();
+                    f_critical_power = feats.Parameter("Critical Power").Require(75,s_melee).OrRequire(75,s_guns).OrRequire(75,s_crossbows).Commit();
+                    f_deadly_snares = feats.Parameter("Deadly Snares").Require(10,a_per).Require(75,s_crossbows).Require(50,s_traps).Commit();
+                    f_elemental_bolts = feats.Parameter("Elemental Bolts").Require(75,s_crossbows).Commit();
+                    f_locus_of_control = feats.Parameter("Locus of Control").Require(10,a_wil).Require(75,s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    f_super_slam = feats.Parameter("Super Slam").Require(10,a_str).Require(75,s_melee).Commit();
+                    f_commando = feats.Parameter("Commando").Require(80,s_guns).Commit();
+                    f_eviscerate = feats.Parameter("Eviscerate").Require(80,s_melee).Require(8,a_dex).Commit();
+                    f_split_spare = feats.Parameter("Split Spare").Require(10,a_dex).Require(80,s_throwing).Commit();
 
-                    f_heavyweight = feats.Parameter("Heavyweight").Commit();
+                    f_heavyweight = feats.Parameter("Heavyweight").Require(10, a_str).Require(100,s_melee).Commit();
 
                     f_psi_empathy = feats.Parameter("Psi Empathy", 0).Commit();
                     f_fisherman = feats.Parameter("Fisherman", 0).Commit();
                     f_hunter = feats.Parameter("Hunter", 0).Commit();
                     f_echoing_soliloquy = feats.Parameter("Echoing Soliloquy", 0).Commit();
                 }
+
+                using (var psi = builder.ParameterType("Psi Abilities"))
+                {
+                    t_psi_abilities = psi.ptype;
+                    for (int i = 1; i <= builder.game.MaxLevel; i++)
+                        psi.LevelPoints(i, 0, 1);
+
+                    psi.SCategory("Metathermics");
+                    p_cryokinesis = psi.Parameter("Cryokinesis", 0).Require(0, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_pyrokinesis = psi.Parameter("Pyrokinesis", 0).Require(25, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_cryostasis= psi.Parameter("Cryostasis", 0).Require(35, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_pyrokinetic_stream = psi.Parameter("Pyrokinetic Stream", 0).Require(35, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_cryokinetic_orb= psi.Parameter("Cryokinetic Orb", 0).Require(40, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_thermodynamic_destabilisation = psi.Parameter("Thermodynamic Destabilisation", 0).Require(50, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_cryo_shield= psi.Parameter("Cryo Sheild", 0).Require(55, s_metathermics).Require(1,f_psi_empathy).Commit();
+                    p_exothermic_aura= psi.Parameter("Exothermic Aura", 0).Require(70, s_metathermics).Require(1,f_psi_empathy).Commit();
+
+                    psi.SCategory("Psychokinesis");
+                    p_telekenitic_punch = psi.Parameter("Telekinetic Punch", 0).Require(0, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_force_field= psi.Parameter("Force Field", 0).Require(25, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_electrokinesis= psi.Parameter("Electrokinesis", 0).Require(30, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_force_emission= psi.Parameter("Force Emission", 0).Require(35, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_disruptive_field = psi.Parameter("Disruptive Field", 0).Require(40, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_electrokinetic_imprint= psi.Parameter("Electrokinetic Imprint", 0).Require(45, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_telekinetic_proxy= psi.Parameter("Telekinetic Proxy", 0).Require(55, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+                    p_implosion= psi.Parameter("Implosion", 0).Require(70, s_psychokinesis).Require(1,f_psi_empathy).Commit();
+
+                    psi.SCategory("Thought Control");
+                    p_neural_overload = psi.Parameter("Neural Overload", 0).Require(0, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_frighten = psi.Parameter("Frighten", 0).Require(30, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_billocation= psi.Parameter("Billocation", 0).Require(35, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_mental_breakdown = psi.Parameter("Mental Breakdown", 0).Require(45, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_psi_cognitive_interruption = psi.Parameter("Psi-cognitive Interruption", 0).Require(55, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_enrage = psi.Parameter("Enrage", 0).Require(60, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_psuedo_spatial_projection = psi.Parameter("Psuedo-spatial Projection", 0).Require(65, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                    p_neurovisual_disruption = psi.Parameter("Neurovisual Disruption", 0).Require(70, s_thoughtcontrol).Require(1,f_psi_empathy).Commit();
+                }
+
                 return builder.game;
             }
         }
