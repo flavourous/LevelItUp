@@ -122,7 +122,11 @@ namespace LevelItUp.Model.Test.NetFW
             var sPump = new[] { s_guns, s_metathermics, s_dodge, s_evasion,
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
             var fChoose = new[] { f_psychosis, f_ninja_looter, f_snooping, f_nimble,
-                f_kneecap_shot, f_recklessness, f_rapid_fire, f_thermodynamicity, f_sharpshooter };
+                f_kneecap_shot, f_recklessness, f_rapid_fire, f_quick_pockets, f_sharpshooter };
+
+            foreach (var p in new[] { p_neural_overload, p_telekinetic_punch, p_cryokinesis })
+                AssertParamChange(p, +1);
+
             for (int i = 2; i <= 10; i++)
             {
                 OnLevel = i;
@@ -137,6 +141,18 @@ namespace LevelItUp.Model.Test.NetFW
                     (t_feats, LevelStat.Ok)
                 );
             }
+            foreach (var p in new[] 
+                {
+                    p_frighten, p_billocation, p_mental_breakdown, p_psi_cognitive_interruption,
+                    p_enrage,
+                    p_force_field, p_electrokinesis, p_force_emission, p_disruptive_field,
+                    p_electrokinetic_imprint,
+                    p_pyrokinesis, p_cryostasis, p_pyrokinetic_stream, p_cryokinetic_orb,
+                    p_thermodynamic_destabilisation
+                })
+                
+                AssertParamChange(p, +1);
+
         }
         [Test, Order(01000)]
         public void c01000__Level_10_to_15_BoredNow_CheckCant_26()
@@ -149,11 +165,17 @@ namespace LevelItUp.Model.Test.NetFW
                 f_cryogenic_induction, f_suppressive_fire, f_psionic_mania,
                 f_telekinetic_undulation, f_neural_overclocking, f_critical_power,
                 f_pack_rathound, f_opportunist,f_hit_and_run ,
-                f_locus_of_control, f_cerebral_trauma, f_quick_pockets
+                f_locus_of_control, f_cerebral_trauma, f_thermodynamicity
             };
             for (int i = 11; i<=25; i++)
             {
                 OnLevel = i;
+
+                if (i==12)
+                    foreach (var p in new[] { p_psuedo_spatial_projection, p_telekinetic_proxy, p_cryo_shield,
+                                              p_neurovisual_disruption, p_implosion, p_exothermic_aura })
+                        AssertParamChange(p, +1);
+
                 if (i % 4 == 0) AssertParamChange(a_per, +1);
                 foreach (var s in sPump) AssertParamChange(s, +5);
                 AssertParamChange(fChoose[i - 11], +1);
