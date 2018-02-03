@@ -79,7 +79,7 @@ namespace LevelItUp.Core.ViewModels
 
         public INC<String> Name = new NC<String>();
         public INCList<ParamViewModel> Params = new NCList<ParamViewModel>();
-        public INCDictionary<int, String> LevelStatus = new NCDictionary<int, String>();
+        public INCDictionary<int, String> LevelStatus = new NCDictionary<int, String>(new Dictionary<int,String>());
 
         public int id { get { return t.id; } }
     }

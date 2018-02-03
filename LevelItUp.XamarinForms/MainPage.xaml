@@ -8,7 +8,7 @@
                       xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
                       xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
                       x:Class="LevelItUp.XamarinForms.MainPage">
-    <views:MvxListView mvx:Bi.nd="ItemsSource Builds; Click ViewBuildCommand">
+    <views:MvxListView mvx:Bi.nd="ItemsSource Games; Click ViewGameCommand">
         <views:MvxListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>

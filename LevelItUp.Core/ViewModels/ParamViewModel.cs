@@ -19,6 +19,6 @@ namespace LevelItUp.Core.ViewModels
 
         public INC<String> Name = new NC<String>();
         public INC<String> Category = new NC<String>();
-        public INCList<LevelParamViewModel> Levels = new NCList<LevelParamViewModel>();
+        public INCList<LevelParamViewModel> Levels = new NCList<LevelParamViewModel>(new List<LevelParamViewModel>());
     }
 }

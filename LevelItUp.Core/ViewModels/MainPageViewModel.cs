@@ -22,7 +22,7 @@ namespace LevelItUp.Core.ViewModels
             Games.Value.Add(new GameViewModel(navigationService, dal, underrail));
         }
         public INC<GameViewModel> SelectedGame = new NC<GameViewModel>();
-        public INCList<GameViewModel> Games = new NCList<GameViewModel>();
+        public INCList<GameViewModel> Games = new NCList<GameViewModel>(new List<GameViewModel>());
         public IMvxAsyncCommand ViewGameCommand { get; private set; }
     }
 }

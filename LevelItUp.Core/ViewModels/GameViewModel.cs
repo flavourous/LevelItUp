@@ -30,7 +30,7 @@ namespace LevelItUp.Core.ViewModels
         }
         public INC<String> Name = new NC<String>();
         public INC<BuildViewModel> SelectedBuild = new NC<BuildViewModel>();
-        public INCList<BuildViewModel> Builds = new NCList<BuildViewModel>();
+        public INCList<BuildViewModel> Builds = new NCList<BuildViewModel>(new List<BuildViewModel>());
         public IMvxAsyncCommand ViewBuildCommand { get; private set; }
         public IMvxAsyncCommand NewBuildCommand { get; private set; }
     }
