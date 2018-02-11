@@ -2,5 +2,23 @@
 <m:MvxFormsApplication xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:m="clr-namespace:MvvmCross.Forms.Platform;assembly=MvvmCross.Forms"
+             xmlns:l="clr-namespace:LevelItUp.XamarinForms"
+             xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+             xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+             xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
              x:Class="LevelItUp.XamarinForms.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="ItemCell">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem mvx:Bi.nd="Command DeleteCommand" Text="Delete"/>
+                    </ViewCell.ContextActions>
+                    <ViewCell.View>
+                        <Label mvx:Bi.nd="Text Name" VerticalOptions="Center" HorizontalOptions="Start" Margin="5,0,0,0"/>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
 </m:MvxFormsApplication>

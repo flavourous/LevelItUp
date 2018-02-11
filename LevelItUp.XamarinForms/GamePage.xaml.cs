@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace LevelItUp.XamarinForms
 {
-    public partial class MainPage : MvxContentPage<MainPageViewModel>
+    public partial class GamePage : MvxContentPage<GameViewModel>
     {
-        public MainPage()
+        public GamePage()
         {
             InitializeComponent();
         }

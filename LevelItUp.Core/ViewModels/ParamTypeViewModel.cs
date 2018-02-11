@@ -1,4 +1,4 @@
-﻿using LevelItUp.Model;
+﻿using LevelItUp.Model;  
 using MvvmCross.Core.ViewModels;
 using MvvmCross.FieldBinding;
 using System;
@@ -8,35 +8,33 @@ using System.Text;
 
 namespace LevelItUp.Core.ViewModels
 {
-    public class ParamTypeViewModel : MvxViewModel
+    public abstract class ParamTypeViewModel : MvxViewModel
     {
-        FakeDAL dal;
-        BuildDefinitionManager manager;
-        BuildParameterType t;
+        protected readonly FakeDAL dal;
+        protected readonly BuildDefinitionManager manager;
+        protected readonly BuildParameterType t;
         public ParamTypeViewModel(FakeDAL dal, BuildParameterType t, BuildDefinitionManager manager)
         {
             this.dal = dal;
             this.manager = manager;
             this.t = t;
-            Name.Value = t.Name;
-            Params.Value = dal.Get<BuildParameter>()
-                              .Where(x => x.Type.id == t.id && x.Game.id == t.Game.id)
-                              .Select(x => new ParamViewModel(dal, x, manager))
-                              .ToList();
-            foreach(var pt in Params.Value)
-                foreach(var l in pt.Levels.Value)
-                    l.PropertyChanged += (s, e) =>
-                            EvaluateStatsAroundLevel(e.PropertyName, l.Level.Value);
-            for(int i=1;i<=t.Game.MaxLevel;i++)
-                LevelStatus[i] =  EvaluateLevelStats(i);
+            Name = t.Name;
+
+            // Row Headers
+            RHeaders = Enumerable.Range(1, t.Game.MaxLevel)
+                                 .Select(x => new[] { new RHVM { Level = x, Status = EvaluateLevelStats(x) } }.ToList() as IList<RHVM>)
+                                 .ToList();
+            manager.ParameterChanged += EvaluateStatsAroundLevel;
         }
 
-        void EvaluateStatsAroundLevel(String pn, int level)
+        public String Name { get; set; }
+        public int id { get { return t.id; } }
+
+        void EvaluateStatsAroundLevel(int level)
         {
-            if (pn != "Amount") return;
             for (int i = level - 1; i <= level + 1; i++)
                 if (i >= 1 && i <= t.Game.MaxLevel)
-                    LevelStatus[i] = EvaluateLevelStats(i);
+                    RHeaders[i - 1][0].Status = EvaluateLevelStats(i);
         }
         String EvaluateLevelStats(int level)
         {
@@ -77,10 +75,12 @@ namespace LevelItUp.Core.ViewModels
             );
         }
 
-        public INC<String> Name = new NC<String>();
-        public INCList<ParamViewModel> Params = new NCList<ParamViewModel>();
-        public INCDictionary<int, String> LevelStatus = new NCDictionary<int, String>(new Dictionary<int,String>());
+        public class RHVM
+        {
+            public int Level { get; set; }
+            public String Status { get; set; }
+        }
 
-        public int id { get { return t.id; } }
+        public IList<IList<RHVM>> RHeaders { get; set; }
     }
 }

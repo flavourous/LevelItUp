@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace LevelItUp.XamarinForms
 {
-    public partial class MainPage : MvxContentPage<MainPageViewModel>
+    public partial class ChoicePage : MvxContentPage<ChoiceViewModel>
     {
-        public MainPage()
+        public ChoicePage()
         {
             InitializeComponent();
         }

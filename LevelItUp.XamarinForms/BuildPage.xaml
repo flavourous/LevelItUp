@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxTabbedPage  x:TypeArguments="viewModels:BuildViewModel" 
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:local="clr-namespace:LevelItUp.XamarinForms"
+                      xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+                      xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
+                      xmlns:lxf="clr-namespace:LibXF.Controls;assembly=LibXF.Controls.BindableLayout"
+                      xmlns:blxf="clr-namespace:LibXF.Controls;assembly=LibXF.Controls"
+                      mvx:Bi.nd="Title Format('{1} Build: {0}', Name, Game); ItemsSource ParameterTypes"
+                      x:Name="BuildRootView"
+                      x:Class="LevelItUp.XamarinForms.BuildPage">
+    <views:MvxTabbedPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="CHead">
+                <StackLayout>
+                    <Label mvx:Bi.nd="Text Data.Name;IsVisible !Data.Sub;" HorizontalTextAlignment="Center" BackgroundColor="#CCCCCC" Margin="2,0,2,0"/>
+                    <Label mvx:Bi.nd="Text Data.Name;IsVisible Data.Sub;" 
+                       HeightRequest="120" 
+                       WidthRequest="120" 
+                       Margin="-46,0,-44,0" 
+                       Rotation="-90" 
+                       AnchorX="0.5" 
+                       AnchorY="0.5"
+                       HorizontalTextAlignment="Start"
+                       VerticalTextAlignment="Center"/>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="MCell">
+                <Label mvx:Bi.nd="Text Data.Amount" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,5" />
+            </DataTemplate>
+            <DataTemplate x:Key="RHead">
+                <Label mvx:Bi.nd="Text Data.Level" VerticalOptions="Center" HorizontalOptions="End"/>
+            </DataTemplate>
+            <lxf:CellInfoBinder ColumnSpan="{Binding CSpan}" x:Key="cib"/>
+            <DataTemplate x:Key="BCell">
+                <lxf:BindableStack mvx:Bi.nd="ItemsSource Data" Orientation="Horizontal" >
+                    <lxf:BindableStack.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <Button mvx:Bi.nd="Text Name; Command Command; IsVisible !Adder;"  BackgroundColor="#00000000" />
+                                <Button mvx:Bi.nd="Command Command; IsVisible Adder;" Text="➕"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </lxf:BindableStack.ItemTemplate>
+                </lxf:BindableStack>
+            </DataTemplate>
+        </ResourceDictionary>
+    </views:MvxTabbedPage.Resources>
+    <views:MvxTabbedPage.ItemTemplate>
+        <local:ParamTemplateSelector>
+            <local:ParamTemplateSelector.Multi>
+                <DataTemplate>
+                    <ContentPage mvx:Bi.nd="Title Name">
+                        <lxf:BindableGrid mvx:Bi.nd="ItemsSource Cells; RowHeaders RHeaders; ColumnHeaders CHeaders;" 
+                                      FrozenHeaders="True" 
+                                      RowHeadersTemplate="{StaticResource RHead}"
+                                      ColumnHeadersTemplate="{StaticResource CHead}"
+                                      ItemTemplate="{StaticResource MCell}"
+                                      CellInfo="{StaticResource cib}"/>
+                    </ContentPage>
+                </DataTemplate>
+            </local:ParamTemplateSelector.Multi>
+            <local:ParamTemplateSelector.Binary>
+                <DataTemplate>
+                    <ContentPage mvx:Bi.nd="Title Name">
+                        <lxf:BindableGrid mvx:Bi.nd="ItemsSource Cells; RowHeaders RHeaders;" 
+                                      FrozenHeaders="True" 
+                                      RowHeadersTemplate="{StaticResource RHead}"
+                                      ItemTemplate="{StaticResource BCell}"/>
+                    </ContentPage>
+                </DataTemplate>
+            </local:ParamTemplateSelector.Binary>
+        </local:ParamTemplateSelector>
+    </views:MvxTabbedPage.ItemTemplate>
+</views:MvxTabbedPage>

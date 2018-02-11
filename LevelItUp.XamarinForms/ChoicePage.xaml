@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxContentPage
+    x:TypeArguments="viewModels:ChoiceViewModel" 
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:local="clr-namespace:LevelItUp"
+                      xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+                      xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
+                      mvx:Bi.nd="Title Name"
+                      x:Class="LevelItUp.XamarinForms.ChoicePage">
+    <!--grouping bug affects ItemTapped (and item click here) being off by one, so first item is null. UWP only-->
+    <!--https://github.com/xamarin/Xamarin.Forms/releases/tag/release-2.5.0-sr4-->
+    <!--release has fix for this-->
+    <views:MvxListView mvx:Bi.nd="ItemsSource Choices; ItemClick Choose;" ItemSelected="Deselect" IsGroupingEnabled="True">
+        <views:MvxListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Label mvx:Bi.nd="Text Group" Margin="0" FontSize="Micro"/>
+                </ViewCell>
+            </DataTemplate>
+        </views:MvxListView.GroupHeaderTemplate>
+        <views:MvxListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Label mvx:Bi.nd="Text Name"/>
+                </ViewCell>
+            </DataTemplate>
+        </views:MvxListView.ItemTemplate>
+    </views:MvxListView>
+</views:MvxContentPage>

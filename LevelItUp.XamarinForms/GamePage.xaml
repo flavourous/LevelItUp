@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxContentPage
+    x:TypeArguments="viewModels:GameViewModel" 
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:local="clr-namespace:LevelItUp"
+                      xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+                      xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
+                      mvx:Bi.nd="Title Name"
+                      x:Class="LevelItUp.XamarinForms.GamePage">
+    <views:MvxContentPage.ToolbarItems>
+        <ToolbarItem mvx:Bi.nd="Command NewBuildCommand" Text="New Build"/>
+    </views:MvxContentPage.ToolbarItems>
+    <Grid>
+        <views:MvxListView ItemSelected="Deselect" mvx:Bi.nd="ItemsSource Builds; ItemClick ViewBuildCommand" ItemTemplate="{StaticResource ItemCell}"/>
+        <Label HorizontalOptions="Fill" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="Fill" mvx:Bi.nd="IsVisible Busy" TextColor="#FFFFFF" BackgroundColor="#88000000" >Loading</Label>
+    </Grid>
+</views:MvxContentPage>

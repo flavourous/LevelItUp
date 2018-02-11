@@ -15,10 +15,9 @@ namespace LevelItUp.Core.ViewModels
         public LevelParamViewModel(FakeDAL dal, BuildParameter p, int level, BuildDefinitionManager manager)
         {
             this.manager = manager;
-            Level.Value = level;
             lp = dal.Get<BuildLevelParameter>()
-                   .Single(x => x.Game.id == p.Game.id && x.Parameter.Type.id == p.Type.id && x.Parameter.id == p.id);
-            Amount.Value = lp.Amount;
+                   .Single(x => x.Game.id == p.Game.id && x.Build.id == manager.build.id && x.Parameter.Type.id == p.Type.id && x.Parameter.id == p.id && x.Level == level);
+            Amount = lp.Amount;
             AmountUpCommand = ChCommand(+1);
             AmountDownCommand = ChCommand(-1);
         }
@@ -29,13 +28,13 @@ namespace LevelItUp.Core.ViewModels
                 async () =>
                 {
                     manager.ChangeRequest(lp, am)();
-                    Amount.Value += am;
+                    Amount+= am;
+                    RaisePropertyChanged("Amount");
                 },
                 () => manager.ChangeRequest(lp, am) != null
             );
         }
-        public INC<int> Level = new NC<int>();
-        public INC<int> Amount = new NC<int>();
+        public int Amount { get; set; }
         public IMvxAsyncCommand AmountUpCommand { get; private set; }
         public IMvxAsyncCommand AmountDownCommand { get; private set; }
     }

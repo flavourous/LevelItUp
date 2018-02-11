@@ -9,37 +9,41 @@ namespace LevelItUp.Model
     public class BuildDefinitionManager
     {
         readonly FakeDAL dal;
-        readonly Build build;
+        public readonly Build build;
         readonly List<BuildLevelParameter> buildParams;
         public BuildDefinitionManager(FakeDAL dal, GameBuild game, Build build )
         {
             this.dal = dal;
             this.build = build;
 
-            var blp = dal.Get<BuildLevelParameter>().Where(x => x.Build.id == build.id);
+                var blp = dal.Get<BuildLevelParameter>().Where(x => x.Build.id == build.id);
             buildParams = dal.Get<BuildParameter>()
                              .ToList()
                              .Where(x => x.Game.id == build.Game.id)
                              .SelectMany(x => Enumerable.Range(1, game.MaxLevel).Select(i =>
                                               {
-                                                 // get or create the levelparameter
-                                                 var b = blp.FirstOrDefault(l => l.Parameter.id == x.id && l.Level == i);
-                                                 if (b == null)
-                                                 {
-                                                     b = new BuildLevelParameter
-                                                     {
-                                                         Game = build.Game,
-                                                         Build = build,
-                                                         Parameter = x,
-                                                         Amount = x.Type.Minimum,
-                                                         Level = i
-                                                     };
-                                                     dal.Save(b);
-                                                 }
-                                                 return b;
+                                                  // get or create the levelparameter
+                                                  var b = blp.FirstOrDefault(l => l.Parameter.id == x.id && l.Level == i);
+                                                  if (b == null)
+                                                  {
+                                                      b = new BuildLevelParameter
+                                                      {
+                                                          Game = build.Game,
+                                                          Build = build,
+                                                          Parameter = x,
+                                                          Amount = x.Type.Minimum,
+                                                          Level = i
+                                                      };
+                                                  }
+                                                  return b;
                                               }))
                              .ToList();
+
+            foreach (var b in buildParams)
+                dal.Save(b);
         }
+
+        public event Action<int> ParameterChanged = delegate { };
 
         public Action ChangeRequest(BuildLevelParameter param, int amount)
         {
@@ -73,6 +77,7 @@ namespace LevelItUp.Model
             {
                 param.Amount += amount;
                 dal.Save(param);
+                ParameterChanged(param.Level);
             };
         }
 

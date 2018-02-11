@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using LevelItUp.Model;
+using System.Threading.Tasks;
 
 namespace LevelItUp.Core.ViewModels
 {
@@ -16,13 +17,14 @@ namespace LevelItUp.Core.ViewModels
         public MainPageViewModel(IMvxNavigationService navigationService)
         {
             this.navigationService = navigationService;
-            ViewGameCommand = new MvxAsyncCommand(async () => await this.navigationService.Navigate(SelectedGame.Value), () => SelectedGame.Value != null);
             var dal = FakeDAL.OurFakeDal();
             var underrail = d_Underrail.Generate(dal);
-            Games.Value.Add(new GameViewModel(navigationService, dal, underrail));
+            Games.Add(new GameViewModel(navigationService, dal, underrail));
+            ViewGameCommand = new MvxAsyncCommand<GameViewModel>(async g => await navigationService.Navigate(g));
+            Test= "this was bound";
         }
-        public INC<GameViewModel> SelectedGame = new NC<GameViewModel>();
-        public INCList<GameViewModel> Games = new NCList<GameViewModel>(new List<GameViewModel>());
-        public IMvxAsyncCommand ViewGameCommand { get; private set; }
+        public String Test { get; set; }
+        public IMvxAsyncCommand<GameViewModel> ViewGameCommand { get; set; }
+        public IList<GameViewModel> Games { get; set; } = new MvxObservableCollection<GameViewModel>();
     }
 }

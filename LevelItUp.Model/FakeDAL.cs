@@ -24,12 +24,10 @@ namespace LevelItUp.Model
         readonly Dictionary<Type, List<Delegate>> fkr = new Dictionary<Type, List<Delegate>>();
         readonly Func<object, int> getID;
         readonly Action<object, int> setID;
-        readonly MethodInfo SaveMethod;
         public FakeDAL(Func<object,int> getID, Action<object, int> setID)
         {
             this.getID = getID;
             this.setID = setID;
-            SaveMethod = typeof(FakeDAL).GetMethod("Save");
         }
         public void AddFkr<T, D>(Func<T, D> selector)
         {
@@ -38,7 +36,10 @@ namespace LevelItUp.Model
         }
         Dictionary<int, Object> Ensure<T>()
         {
-            var tt = typeof(T);
+            return Ensure(typeof(T));
+        }
+        Dictionary<int, Object> Ensure(Type tt)
+        {
             if (!repo.ContainsKey(tt))
             {
                 repo[tt] = new Dictionary<int, object>();
@@ -46,14 +47,22 @@ namespace LevelItUp.Model
             }
             return repo[tt];
         }
+        public void Delete<T>(T item)
+        {
+            Ensure<T>().Remove(getID(item));
+        }
         public IEnumerable<T> Get<T>()
         {
             return Ensure<T>().Values.Cast<T>();
         }
         public void Save<T>(T item)
         {
+            Save(typeof(T), item);
+        }
+        void Save(Type t, object item)
+        {
             // get the table and itemid
-            var tabl = Ensure<T>();
+            var tabl = Ensure(t);
             int id = getID(item);
 
             // new item
@@ -65,10 +74,10 @@ namespace LevelItUp.Model
             tabl[id] = item;
 
             // save fkrs
-            foreach(var fd in fkr[typeof(T)])
+            foreach(var fd in fkr[t])
             {
                 var f = fd.DynamicInvoke(item);
-                if (f != null) SaveMethod.MakeGenericMethod(f.GetType()).Invoke(this, new[] { f });
+                if (f != null) Save(f.GetType(), f);
             }
         }
     }

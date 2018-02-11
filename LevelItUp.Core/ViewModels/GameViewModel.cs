@@ -4,12 +4,15 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.FieldBinding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LevelItUp.Core.ViewModels
 {
     public class GameViewModel : MvxViewModel
     {
+        readonly MvxObservableCollection<BuildViewModel> builds;
         readonly GameBuild game;
         readonly FakeDAL dal;
         private readonly IMvxNavigationService navigationService;
@@ -18,20 +21,51 @@ namespace LevelItUp.Core.ViewModels
             this.navigationService = navigationService;
             this.dal = dal;
             this.game = game;
-            ViewBuildCommand = new MvxAsyncCommand(async () => await this.navigationService.Navigate(SelectedBuild.Value), () => SelectedBuild.Value != null);
+            this.Name = game.Name;
+
+            builds = new MvxObservableCollection<BuildViewModel>(dal.Get<Build>()
+                              .Where(x => x.Game.id == game.id)
+                              .Select(Create));
+            Builds = builds;
+
+            ViewBuildCommand = new MvxAsyncCommand<BuildViewModel>(async b => await navigationService.Navigate(b));
             NewBuildCommand = new MvxAsyncCommand(async () =>
             {
-                var build = new Build { Name = "New Build", Game = game };
-                dal.Save(build);
-                var bvm = new BuildViewModel(dal, build);
-                Builds.Value.Add(bvm);
-                await this.navigationService.Navigate(bvm);
+                Busy = true;
+                RaisePropertyChanged("Busy");
+                var bvm = await Task.Run(() =>
+                {
+                    var build = new Build { Name = "New Build", Game = game };
+                    dal.Save(build);
+                    return Create(build);
+                });
+                builds.Add(bvm);
+                Busy = false;
+                RaisePropertyChanged("Busy");
+                await navigationService.Navigate(bvm);
             });
+
         }
-        public INC<String> Name = new NC<String>();
-        public INC<BuildViewModel> SelectedBuild = new NC<BuildViewModel>();
-        public INCList<BuildViewModel> Builds = new NCList<BuildViewModel>(new List<BuildViewModel>());
-        public IMvxAsyncCommand ViewBuildCommand { get; private set; }
-        public IMvxAsyncCommand NewBuildCommand { get; private set; }
+        BuildViewModel Create(Build b)
+        {
+            var vm = new BuildViewModel(dal, b);
+            vm.DeleteCommand = new MvxCommand(() =>
+            {
+                Busy = true;
+                builds.Remove(vm);
+                Busy = false;
+                Task.Run(() => dal.Delete(b));
+            });
+            return vm;
+        }
+       
+        public bool Busy { get; set; }
+        public String Name { get; set; }
+        public IList<BuildViewModel> Builds { get; set; }
+        public IMvxCommand<BuildViewModel> ViewBuildCommand { get; private set; }
+        public IMvxCommand NewBuildCommand { get; private set; }
+        public IMvxCommand<BuildViewModel> DeleteCommand { get; private set; }
     }
+
+    
 }

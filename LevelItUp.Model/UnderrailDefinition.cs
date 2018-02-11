@@ -105,7 +105,7 @@ namespace LevelItUp.Model
                     s_tailoring = skills.Parameter("Tailoring").Commit();
 
                     skills.SCategory("Psi");
-                    s_thoughtcontrol = skills.Parameter("ThoughtControl").Commit();
+                    s_thoughtcontrol = skills.Parameter("Thought Control").Commit();
                     s_psychokinesis = skills.Parameter("Psychokinesis").Commit();
                     s_metathermics = skills.Parameter("Metathermics").Commit();
                     //                    s_temporalmanipulation = skills.Parameter("TemporalManipulation").Commit();
