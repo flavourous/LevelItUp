@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LibXF.Controls" Version="1.0.0.2" />
     <PackageReference Include="MvvmCross" Version="5.4.0" />
     <PackageReference Include="MvvmCross.Forms" Version="5.4.0" />
     <PackageReference Include="MvvmCross.Plugin.FieldBinding" Version="5.4.0" />
@@ -17,12 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LevelItUp.Core\LevelItUp.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="LibXF.Controls">
-      <HintPath>..\..\LibXF\LibXF.Controls\bin\Debug\netstandard1.4\LibXF.Controls.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
