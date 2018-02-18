@@ -69,6 +69,7 @@ namespace LevelItUp.Model
     {
         public String Name { get; set; }
         public int Minimum { get; set; }
+        public int DefaultIncrement { get; set; }
     }
 
     // e.g. 120 Skillpoints at lv 1, any skill cant go higher than 15 at this level

@@ -7,18 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibXF.Controls" Version="1.0.0" />
-    <PackageReference Include="LibXF.Controls.BindableLayout" Version="1.0.1.11" />
     <PackageReference Include="MvvmCross" Version="5.4.0" />
     <PackageReference Include="MvvmCross.Forms" Version="5.4.0" />
     <PackageReference Include="MvvmCross.Plugin.FieldBinding" Version="5.4.0" />
     <PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="5.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LevelItUp.Core\LevelItUp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LibXF.Controls">
+      <HintPath>..\..\LibXF\LibXF.Controls\bin\Debug\netstandard1.4\LibXF.Controls.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

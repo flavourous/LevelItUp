@@ -145,6 +145,9 @@
     <PackageReference Include="MvvmCross.Platform">
       <Version>5.4.0</Version>
     </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.Color">
+      <Version>5.6.3</Version>
+    </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.FieldBinding">
       <Version>5.4.0</Version>
     </PackageReference>
@@ -155,7 +158,7 @@
       <Version>4.4.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>2.5.0.122203</Version>
+      <Version>2.5.0.280555</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +170,11 @@
       <Project>{05d97bf4-db6c-4e87-8165-8998ee4c1fae}</Project>
       <Name>LevelItUp.XamarinForms</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LibXF.Controls">
+      <HintPath>..\..\LibXF\LibXF.Controls\bin\Debug\netstandard1.4\LibXF.Controls.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

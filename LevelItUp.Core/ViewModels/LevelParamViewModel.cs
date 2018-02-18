@@ -10,32 +10,24 @@ namespace LevelItUp.Core.ViewModels
 {
     public class LevelParamViewModel : MvxViewModel
     {
-        readonly BuildLevelParameter lp;
-        readonly BuildDefinitionManager manager;
-        public LevelParamViewModel(FakeDAL dal, BuildParameter p, int level, BuildDefinitionManager manager)
+        public readonly BuildLevelParameter lp;
+        public LevelParamViewModel(FakeDAL dal, BuildParameter p, int level, Build b, IMvxCommand<LevelParamViewModel> tap)
         {
-            this.manager = manager;
             lp = dal.Get<BuildLevelParameter>()
-                   .Single(x => x.Game.id == p.Game.id && x.Build.id == manager.build.id && x.Parameter.Type.id == p.Type.id && x.Parameter.id == p.id && x.Level == level);
+                   .Single(x => x.Game.id == p.Game.id && x.Build.id == b.id && x.Parameter.Type.id == p.Type.id && x.Parameter.id == p.id && x.Level == level);
             Amount = lp.Amount;
-            AmountUpCommand = ChCommand(+1);
-            AmountDownCommand = ChCommand(-1);
+            Tap = tap;
+            Name = p.Name;
+            Level = level;
         }
-        IMvxAsyncCommand ChCommand(int am)
-        {
-            return new MvxAsyncCommand
-            (
-                async () =>
-                {
-                    manager.ChangeRequest(lp, am)();
-                    Amount+= am;
-                    RaisePropertyChanged("Amount");
-                },
-                () => manager.ChangeRequest(lp, am) != null
-            );
-        }
-        public int Amount { get; set; }
-        public IMvxAsyncCommand AmountUpCommand { get; private set; }
-        public IMvxAsyncCommand AmountDownCommand { get; private set; }
+        public String Name { get; set; }
+        public int Level { get; set; }
+        public IMvxCommand<LevelParamViewModel> Tap { get; set; }
+
+        private int amount;
+        public int Amount { get => amount; set => this.RaiseAndSetIfChanged(ref amount, value); }
+
+        private bool isSelected;
+        public bool IsSelected { get => isSelected; set => this.RaiseAndSetIfChanged(ref isSelected, value); }
     }
 }

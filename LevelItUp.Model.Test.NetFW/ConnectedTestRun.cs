@@ -106,7 +106,7 @@ namespace LevelItUp.Model.Test.NetFW
             AssertLevelStatus((t_feats, LevelStat.None)); // need to spend 1 feat
             AssertParamChEqul(f_psychosis, +1, 1);
             AssertLevelStatus((t_feats, LevelStat.Ok)); // feats are ok..
-            OnLevel = 3;
+            OnLevel = 4;
             AssertParamChEqul(f_tranquility, +1, 1);  // it'll let you do it but expect you to remove one or other
             AssertLevelStatus((t_feats, LevelStat.RequirmentsNotMet)); // lockout with tranquilitty!
             AssertParamNeeded(f_psychosis, f_tranquility, -1);
@@ -121,8 +121,8 @@ namespace LevelItUp.Model.Test.NetFW
         {
             var sPump = new[] { s_guns, s_metathermics, s_dodge, s_evasion,
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
-            var fChoose = new[] { f_psychosis, f_ninja_looter, f_snooping, f_nimble,
-                f_kneecap_shot, f_recklessness, f_rapid_fire, f_quick_pockets, f_sharpshooter };
+            var fChoose = new[] { f_psychosis, null, f_snooping, null,
+                f_kneecap_shot, null, f_rapid_fire, null, f_sharpshooter };
 
             foreach (var p in new[] { p_neural_overload, p_telekinetic_punch, p_cryokinesis })
                 AssertParamChange(p, +1);
@@ -132,7 +132,8 @@ namespace LevelItUp.Model.Test.NetFW
                 OnLevel = i;
                 if (i % 4 == 0) AssertParamChange(a_per, +1);
                 foreach (var s in sPump) AssertParamChange(s, +5);
-                AssertParamChange(fChoose[i - 2], +1);
+                if(fChoose[i - 2] != null)
+                    AssertParamChange(fChoose[i - 2], +1);
 
                 AssertLevelStatus
                 (
@@ -161,11 +162,9 @@ namespace LevelItUp.Model.Test.NetFW
                 s_hacking, s_lockpicking, s_thoughtcontrol, s_psychokinesis};
             var fChoose = new[]
             {
-                f_mental_subversion, f_hypothermia, f_psychostatic_electricity,
-                f_cryogenic_induction, f_suppressive_fire, f_psionic_mania,
-                f_telekinetic_undulation, f_neural_overclocking, f_critical_power,
-                f_pack_rathound, f_opportunist,f_hit_and_run ,
-                f_locus_of_control, f_cerebral_trauma, f_thermodynamicity
+                null, f_hypothermia, null, f_cryogenic_induction, null, f_psionic_mania,
+                null, f_neural_overclocking, null, f_pack_rathound, null, f_hit_and_run ,
+                null, f_cerebral_trauma, null
             };
             for (int i = 11; i<=25; i++)
             {
@@ -178,7 +177,8 @@ namespace LevelItUp.Model.Test.NetFW
 
                 if (i % 4 == 0) AssertParamChange(a_per, +1);
                 foreach (var s in sPump) AssertParamChange(s, +5);
-                AssertParamChange(fChoose[i - 11], +1);
+                if(fChoose[i - 11] != null)
+                    AssertParamChange(fChoose[i - 11], +1);
             }
             AssertParamChange(a_wil, +1, false, 26); // NO lol
         }

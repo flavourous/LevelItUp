@@ -159,7 +159,7 @@ namespace LevelItUp.Model
 
                     feats.LevelPoints(1, 2,1);
                     for (int i = 2; i <= builder.game.MaxLevel; i++)
-                        feats.LevelPoints(i, 1,1);
+                        feats.LevelPoints(i, i % 2 == 0 ? 1 : 0, 1);
 
                     f_expertise = feats.Parameter("Expertise").ImplyLevelReq().Commit();
                     f_nimble = feats.Parameter("Nimble").ImplyLevelReq().Commit();
