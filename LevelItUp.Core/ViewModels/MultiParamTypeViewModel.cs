@@ -1,6 +1,5 @@
 ﻿using LevelItUp.Model;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.FieldBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;

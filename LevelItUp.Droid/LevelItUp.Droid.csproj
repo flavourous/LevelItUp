@@ -81,9 +81,6 @@
     <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmCross.Droid.Support.V7.AppCompat.5.4.0\lib\MonoAndroid70\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.FieldBinding, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmCross.Plugin.FieldBinding.5.4.0\lib\MonoAndroid\MvvmCross.FieldBinding.dll</HintPath>
-    </Reference>
     <Reference Include="MvvmCross.Forms, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmCross.Forms.5.4.0\lib\MonoAndroid70\MvvmCross.Forms.dll</HintPath>
     </Reference>
@@ -98,12 +95,6 @@
     </Reference>
     <Reference Include="MvvmCross.Platform.Droid, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmCross.Platform.5.4.0\lib\MonoAndroid\MvvmCross.Platform.Droid.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.FieldBinding, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmCross.Plugin.FieldBinding.5.4.0\lib\MonoAndroid\MvvmCross.Plugins.FieldBinding.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.MethodBinding, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmCross.Plugin.MethodBinding.5.4.0\lib\MonoAndroid\MvvmCross.Plugins.MethodBinding.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />
@@ -193,8 +184,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrap\FieldBindingPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\MethodBindingPluginBootstrap.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

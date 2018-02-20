@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="MvvmCross" Version="5.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.FieldBinding" Version="5.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.MethodBinding" Version="5.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 

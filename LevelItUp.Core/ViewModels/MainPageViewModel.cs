@@ -1,6 +1,5 @@
 ﻿using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.FieldBinding;
 using MvvmCross.Platform;
 using System;
 using System.Collections.Generic;

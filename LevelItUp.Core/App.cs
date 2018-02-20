@@ -1,7 +1,6 @@
 ﻿using LevelItUp.Core.ViewModels;
 using LevelItUp.Model;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.FieldBinding;
 using MvvmCross.Platform;
 using MvvmCross.Platform.IoC;
 using System;
