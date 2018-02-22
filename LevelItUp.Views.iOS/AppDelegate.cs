@@ -33,8 +33,8 @@ namespace LevelItUp.Views.iOS
             Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString());
             Crashes.SentErrorReport += (xme, e) => Console.WriteLine("SENTY! " + e.Report.ToString());
             Crashes.GenerateTestCrash();
+            AppCenter.LogLevel = LogLevel.Verbose;
             AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
-
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
             var setup = new Setup(this, Window);
