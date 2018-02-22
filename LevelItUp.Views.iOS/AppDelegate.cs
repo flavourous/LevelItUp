@@ -1,7 +1,11 @@
 ﻿using Foundation;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Forms.iOS;
 using MvvmCross.Platform;
+using System;
 using UIKit;
 
 namespace LevelItUp.Views.iOS
@@ -13,7 +17,9 @@ namespace LevelItUp.Views.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            XamarinForms.App.StartAppCenter();
+            AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
+            Crashes.GenerateTestCrash();
+            Console.WriteLine("OK I AM ACTUALLY RUNNING, APPCENTER IS " + Crashes.IsEnabledAsync().Result);
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
