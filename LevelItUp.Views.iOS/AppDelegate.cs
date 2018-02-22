@@ -31,7 +31,7 @@ namespace LevelItUp.Views.iOS
                 return true;
             };
             Crashes.FailedToSendErrorReport += (e, d) => Console.WriteLine("FAiled to seond: " + d.Exception.ToString());
-            Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString()));
+            Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString());
             Crashes.SentErrorReport += (xme, e) => Console.WriteLine("SENTY! " + e.Report.ToString());
             Crashes.GenerateTestCrash();
 
