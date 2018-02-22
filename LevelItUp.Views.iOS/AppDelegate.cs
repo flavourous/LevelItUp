@@ -13,6 +13,8 @@ namespace LevelItUp.Views.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            XamarinForms.App.StartAppCenter();
+
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
             var setup = new Setup(this, Window);

@@ -13,9 +13,8 @@ namespace LevelItUp.XamarinForms
 {
     public partial class App : MvxFormsApplication
     {
-        public App()
+        public static void StartAppCenter()
         {
-            InitializeComponent();
             AppCenter.Start
             (
                 "ios=f1388e2a-caa8-4130-b09a-94ad36ea0e87;"
@@ -24,6 +23,12 @@ namespace LevelItUp.XamarinForms
                 typeof(Analytics),
                 typeof(Crashes)
             );
+        }
+
+        public App()
+        {
+            
+            InitializeComponent();
         }
 
         protected override void OnStart()
