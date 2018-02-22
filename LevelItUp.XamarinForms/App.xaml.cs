@@ -16,13 +16,6 @@ namespace LevelItUp.XamarinForms
         public App()
         {
             InitializeComponent();
-        }
-
-        protected override void OnStart()
-        {
-
-            // Handle when your app starts
-#if !DEBUG
             AppCenter.Start
             (
                 "ios=f1388e2a-caa8-4130-b09a-94ad36ea0e87;"
@@ -31,6 +24,13 @@ namespace LevelItUp.XamarinForms
                 typeof(Analytics),
                 typeof(Crashes)
             );
+        }
+
+        protected override void OnStart()
+        {
+
+            // Handle when your app starts
+#if !DEBUG
 #endif
         }
 
