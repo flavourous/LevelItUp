@@ -49,6 +49,7 @@ namespace LevelItUp.Views.iOS
 
                 Window = new UIWindow(UIScreen.MainScreen.Bounds);
                 Window.RootViewController = new SplashController();
+                Window.MakeKeyAndVisible();
             }
             else StartMvvMxForms();
             return true;
@@ -68,7 +69,7 @@ namespace LevelItUp.Views.iOS
             Window.MakeKeyAndVisible();
         }
     }
-    public class SplashController :UIViewController
+    public class SplashController : UIViewController
     {
         UILabel load;
         public override void ViewDidLoad()
