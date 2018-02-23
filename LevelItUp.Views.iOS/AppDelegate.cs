@@ -37,15 +37,20 @@ namespace LevelItUp.Views.iOS
             //Crashes.GenerateTestCrash();
             //AppCenter.LogLevel = LogLevel.Verbose;
             AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
-            AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised!{0}{1}", Environment.NewLine, e.ExceptionObject);
-            Task.Run(async () =>
-            {
-                await Task.Delay(10000);
-                BeginInvokeOnMainThread(StartMvvMxForms);
-            });
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised{0}----------------{0}{1}", Environment.NewLine, e.ExceptionObject);
 
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
-            Window.RootViewController = new SplashController();
+            if (Crashes.HasCrashedInLastSessionAsync().Result)
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(10000);
+                    BeginInvokeOnMainThread(StartMvvMxForms);
+                });
+
+                Window = new UIWindow(UIScreen.MainScreen.Bounds);
+                Window.RootViewController = new SplashController();
+            }
+            else StartMvvMxForms();
             return true;
         }
         void StartMvvMxForms()
@@ -63,7 +68,7 @@ namespace LevelItUp.Views.iOS
             Window.MakeKeyAndVisible();
         }
     }
-    class SplashController :UIViewController
+    public class SplashController :UIViewController
     {
         UILabel load;
         public override void ViewDidLoad()
@@ -74,7 +79,9 @@ namespace LevelItUp.Views.iOS
             // keep the code the username UITextField
             load = new UILabel
             {
-                Text = "Enter your password",
+                BackgroundColor = UIColor.White,
+                TextColor = UIColor.Black,
+                Text = "Uploading crash data :(",
                 Frame = new CGRect(10, 114, w - 20, h),
             };
 
