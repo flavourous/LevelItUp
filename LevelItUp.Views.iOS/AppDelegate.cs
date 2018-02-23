@@ -19,39 +19,24 @@ namespace LevelItUp.Views.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            //Console.WriteLine("OK I AM ACTUALLY RUNNING, APPCENTER IS " + Crashes.IsEnabledAsync().Result);
-            //Crashes.NotifyUserConfirmation(UserConfirmation.AlwaysSend);
-            //Crashes.ShouldAwaitUserConfirmation = () =>
-            //{
-            //    Console.WriteLine("Await confirmination asked");
-            //    return false;
-            //};
-            //Crashes.ShouldProcessErrorReport = e =>
-            //{
-            //    Console.WriteLine("ashing to process " + e.Exception.ToString());
-            //    return true;
-            //};
-            //Crashes.FailedToSendErrorReport += (e, d) => Console.WriteLine("FAiled to seond: " + d.Exception.ToString());
-            //Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString());
-            //Crashes.SentErrorReport += (xme, e) => Console.WriteLine("SENTY! " + e.Report.ToString());
-            //Crashes.GenerateTestCrash();
-            //AppCenter.LogLevel = LogLevel.Verbose;
             AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
             AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised{0}----------------{0}{1}", Environment.NewLine, e.ExceptionObject);
 
-            if (Crashes.HasCrashedInLastSessionAsync().Result)
-            {
-                Task.Run(async () =>
-                {
-                    await Task.Delay(10000);
-                    BeginInvokeOnMainThread(StartMvvMxForms);
-                });
+            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            var sc = new SplashController();
+            Window.RootViewController = sc;
+            Window.MakeKeyAndVisible();
 
-                Window = new UIWindow(UIScreen.MainScreen.Bounds);
-                Window.RootViewController = new SplashController();
-                Window.MakeKeyAndVisible();
-            }
-            else StartMvvMxForms();
+            //if (Crashes.HasCrashedInLastSessionAsync().Result)
+            //{
+            //    Task.Run(async () =>
+            //    {
+            //        await Task.Delay(10000);
+            //        BeginInvokeOnMainThread(StartMvvMxForms);
+            //    });
+
+            //}
+            //else StartMvvMxForms();
             return true;
         }
         void StartMvvMxForms()
@@ -75,6 +60,9 @@ namespace LevelItUp.Views.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            Title = "...Loading...";
+            View.BackgroundColor = UIColor.Cyan;
 
             // keep the code the username UITextField
             load = new UILabel
