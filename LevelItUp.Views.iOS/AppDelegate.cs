@@ -74,7 +74,7 @@ namespace LevelItUp.Views.iOS
     }
     public class SplashController : UIViewController
     {
-        UILabel load;
+        UILabel load,sad;
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -87,9 +87,17 @@ namespace LevelItUp.Views.iOS
             {
                 TextAlignment = UITextAlignment.Center,
                 TextColor = UIColor.White,
-                Text = "Uploading crash data\n(._.)"
+                Text = "Uploading crash data"
             };
+            sad = new UILabel
+            {
+                TextAlignment = UITextAlignment.Center,
+                TextColor = UIColor.White,
+                Text = "(._.)"
+            };
+
             load.Font = UIFont.BoldSystemFontOfSize(24f);
+            sad.Font = UIFont.SystemFontOfSize(24f);
 
             View.AddSubview(load);
         }
@@ -98,7 +106,9 @@ namespace LevelItUp.Views.iOS
             base.ViewDidLayoutSubviews();
             nfloat h = 31.0f;
             nfloat w = View.Bounds.Width;
-            load.Frame = new CGRect(10, 114, w - 20, h*2);
+            nfloat t = View.Bounds.Height / 2;
+            load.Frame = new CGRect(10, t-h, w - 20, h);
+            sad.Frame = new CGRect(10, t, w - 20, h);
         }
     }
 }
