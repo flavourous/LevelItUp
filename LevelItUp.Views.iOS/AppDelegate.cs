@@ -73,19 +73,24 @@ namespace LevelItUp.Views.iOS
         UILabel load;
         public override void ViewDidLoad()
         {
-            nfloat h = 31.0f;
-            nfloat w = View.Bounds.Width;
+            base.ViewDidLoad();
 
             // keep the code the username UITextField
             load = new UILabel
             {
                 BackgroundColor = UIColor.White,
                 TextColor = UIColor.Black,
-                Text = "Uploading crash data :(",
-                Frame = new CGRect(10, 114, w - 20, h),
+                Text = "Uploading crash data :("
             };
 
             View.AddSubview(load);
+        }
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            nfloat h = 31.0f;
+            nfloat w = View.Bounds.Width;
+            load.Frame = new CGRect(10, 114, w - 20, h);
         }
     }
 }
