@@ -36,6 +36,8 @@ namespace LevelItUp.Views.iOS
             AppCenter.LogLevel = LogLevel.Verbose;
             AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised!{0}{1}", Environment.NewLine, e.ExceptionObject);
+
 
             var setup = new Setup(this, Window);
             setup.Initialize();
