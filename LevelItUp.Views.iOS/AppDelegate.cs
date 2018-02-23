@@ -3,7 +3,7 @@ using Foundation;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Push;
+using Microsoft.AppCenter.Distribute;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Forms.iOS;
 using MvvmCross.Platform;
@@ -24,10 +24,12 @@ namespace LevelItUp.Views.iOS
             SemaphoreSlim s = new SemaphoreSlim(0, 1);
             Crashes.FailedToSendErrorReport += (o, e) => s.Release();
             Crashes.SentErrorReport += (o, e) => s.Release();
-            AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes), typeof(Push));
+            AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes), typeof(Distribute));
+            Distribute.DontCheckForUpdatesInDebug();
             AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised{0}----------------{0}{1}", Environment.NewLine, e.ExceptionObject);
-
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
+
+            Distribute.ReleaseAvailable = OnReleaseAvailable;
 
             if (Crashes.HasCrashedInLastSessionAsync().Result)
             {
@@ -43,6 +45,18 @@ namespace LevelItUp.Views.iOS
             else StartMvvMxForms();
             return true;
         }
+
+        bool OnReleaseAvailable(ReleaseDetails releaseDetails)
+        {
+            var title = "Version " + releaseDetails.ShortVersion + " available!";
+            var alert = UIAlertController.Create(title, releaseDetails.ReleaseNotes, UIAlertControllerStyle.Alert);
+            alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, x => Distribute.NotifyUpdateAction(UpdateAction.Update)));
+            if (!releaseDetails.MandatoryUpdate)
+                alert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, x => Distribute.NotifyUpdateAction(UpdateAction.Postpone)));
+            return true;
+        }
+
+
         void StartMvvMxForms()
         {
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
