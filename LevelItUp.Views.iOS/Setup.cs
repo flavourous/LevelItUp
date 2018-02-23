@@ -58,7 +58,6 @@ namespace LevelItUp.Views.iOS
         {
             return base.CreateLogProvider();
         }
-        override 
     }
 
 
