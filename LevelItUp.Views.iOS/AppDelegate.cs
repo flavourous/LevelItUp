@@ -98,7 +98,7 @@ namespace LevelItUp.Views.iOS
             base.ViewDidLayoutSubviews();
             nfloat h = 31.0f;
             nfloat w = View.Bounds.Width;
-            load.Frame = new CGRect(10, 114, w - 20, h);
+            load.Frame = new CGRect(10, 114, w - 20, h*2);
         }
     }
 }
