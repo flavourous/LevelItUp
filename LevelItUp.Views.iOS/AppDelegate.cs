@@ -23,20 +23,19 @@ namespace LevelItUp.Views.iOS
             AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised{0}----------------{0}{1}", Environment.NewLine, e.ExceptionObject);
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
-            var sc = new SplashController();
-            Window.RootViewController = sc;
-            Window.MakeKeyAndVisible();
 
-            //if (Crashes.HasCrashedInLastSessionAsync().Result)
-            //{
-            //    Task.Run(async () =>
-            //    {
-            //        await Task.Delay(10000);
-            //        BeginInvokeOnMainThread(StartMvvMxForms);
-            //    });
-
-            //}
-            //else StartMvvMxForms();
+            if (Crashes.HasCrashedInLastSessionAsync().Result)
+            {
+                var sc = new SplashController();
+                Window.RootViewController = sc;
+                Window.MakeKeyAndVisible();
+                Task.Run(async () =>
+                {
+                    await Task.Delay(10000);
+                    BeginInvokeOnMainThread(StartMvvMxForms);
+                });
+            }
+            else StartMvvMxForms();
             return true;
         }
         void StartMvvMxForms()
