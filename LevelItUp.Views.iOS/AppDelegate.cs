@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using CoreGraphics;
+using Foundation;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -6,6 +7,7 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Forms.iOS;
 using MvvmCross.Platform;
 using System;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace LevelItUp.Views.iOS
@@ -17,27 +19,38 @@ namespace LevelItUp.Views.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            Console.WriteLine("OK I AM ACTUALLY RUNNING, APPCENTER IS " + Crashes.IsEnabledAsync().Result);
-            Crashes.NotifyUserConfirmation(UserConfirmation.AlwaysSend);
-            Crashes.ShouldAwaitUserConfirmation = () =>
-            {
-                Console.WriteLine("Await confirmination asked");
-                return false;
-            };
-            Crashes.ShouldProcessErrorReport = e =>
-            {
-                Console.WriteLine("ashing to process " + e.Exception.ToString());
-                return true;
-            };
-            Crashes.FailedToSendErrorReport += (e, d) => Console.WriteLine("FAiled to seond: " + d.Exception.ToString());
-            Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString());
-            Crashes.SentErrorReport += (xme, e) => Console.WriteLine("SENTY! " + e.Report.ToString());
-            Crashes.GenerateTestCrash();
-            AppCenter.LogLevel = LogLevel.Verbose;
+            //Console.WriteLine("OK I AM ACTUALLY RUNNING, APPCENTER IS " + Crashes.IsEnabledAsync().Result);
+            //Crashes.NotifyUserConfirmation(UserConfirmation.AlwaysSend);
+            //Crashes.ShouldAwaitUserConfirmation = () =>
+            //{
+            //    Console.WriteLine("Await confirmination asked");
+            //    return false;
+            //};
+            //Crashes.ShouldProcessErrorReport = e =>
+            //{
+            //    Console.WriteLine("ashing to process " + e.Exception.ToString());
+            //    return true;
+            //};
+            //Crashes.FailedToSendErrorReport += (e, d) => Console.WriteLine("FAiled to seond: " + d.Exception.ToString());
+            //Crashes.SendingErrorReport += (x, e) => Console.WriteLine("sending...." + e.Report.ToString());
+            //Crashes.SentErrorReport += (xme, e) => Console.WriteLine("SENTY! " + e.Report.ToString());
+            //Crashes.GenerateTestCrash();
+            //AppCenter.LogLevel = LogLevel.Verbose;
             AppCenter.Start("f1388e2a-caa8-4130-b09a-94ad36ea0e87", typeof(Analytics), typeof(Crashes));
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
             AppDomain.CurrentDomain.UnhandledException += (o, e) => Console.WriteLine("Exception Raised!{0}{1}", Environment.NewLine, e.ExceptionObject);
+            Task.Run(async () =>
+            {
+                await Task.Delay(10000);
+                BeginInvokeOnMainThread(StartMvvMxForms);
+            });
 
+            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            Window.RootViewController = new SplashController();
+            return true;
+        }
+        void StartMvvMxForms()
+        {
+            Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
             var setup = new Setup(this, Window);
             setup.Initialize();
@@ -48,8 +61,24 @@ namespace LevelItUp.Views.iOS
             LoadApplication(setup.FormsApplication);
 
             Window.MakeKeyAndVisible();
+        }
+    }
+    class SplashController :UIViewController
+    {
+        UILabel load;
+        public override void ViewDidLoad()
+        {
+            nfloat h = 31.0f;
+            nfloat w = View.Bounds.Width;
 
-            return true;
+            // keep the code the username UITextField
+            load = new UILabel
+            {
+                Text = "Enter your password",
+                Frame = new CGRect(10, 114, w - 20, h),
+            };
+
+            View.AddSubview(load);
         }
     }
 }

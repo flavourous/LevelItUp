@@ -50,7 +50,15 @@ namespace LevelItUp.Views.iOS
             return b.Concat(new[] { typeof(XamarinForms.MainPage).Assembly });
         }
 
-
+        protected override IMvxTrace CreateDebugTrace()
+        {
+            return base.CreateDebugTrace();
+        }
+        protected override IMvxLogProvider CreateLogProvider()
+        {
+            return base.CreateLogProvider();
+        }
+        override 
     }
 
 
