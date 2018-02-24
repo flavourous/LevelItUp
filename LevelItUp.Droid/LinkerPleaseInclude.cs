@@ -6,6 +6,7 @@ using Android.Widget;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
+using System;
 
 namespace LevelItUp.Droid
 {
@@ -108,6 +109,19 @@ namespace LevelItUp.Droid
         public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
         {
             service = new MvxNavigationService(null, loader);
+        }
+
+        public void Include(ConsoleColor color)
+        {
+            Console.Write("");
+            Console.WriteLine("");
+            color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
         }
     }
 }
