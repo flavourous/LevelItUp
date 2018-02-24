@@ -87,7 +87,7 @@ namespace LevelItUp.Views.iOS
             {
                 TextAlignment = UITextAlignment.Center,
                 TextColor = UIColor.White,
-                Text = "Uploading crash data"
+                Text = "uploading crash data"
             };
             sad = new UILabel
             {
