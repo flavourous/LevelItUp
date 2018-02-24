@@ -100,6 +100,7 @@ namespace LevelItUp.Views.iOS
             sad.Font = UIFont.SystemFontOfSize(24f);
 
             View.AddSubview(load);
+            View.AddSubview(sad);
         }
         public override void ViewDidLayoutSubviews()
         {
