@@ -27,16 +27,12 @@ namespace LevelItUp.XamarinForms
 
         public App()
         {
-            
             InitializeComponent();
         }
 
         protected override void OnStart()
         {
-
             // Handle when your app starts
-#if !DEBUG
-#endif
         }
 
         protected override void OnSleep()

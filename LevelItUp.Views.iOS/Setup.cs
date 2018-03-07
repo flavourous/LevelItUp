@@ -10,6 +10,8 @@ using System.Linq;
 using System.Reflection;
 using UIKit;
 using MvvmCross.Platform.Logging;
+using LevelItUp.XamarinForms;
+using LevelItUp.Core;
 
 namespace LevelItUp.Views.iOS
 {

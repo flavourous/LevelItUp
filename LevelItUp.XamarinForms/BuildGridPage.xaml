@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lxf="clr-namespace:LibXF.Controls;assembly=LibXF.Controls"
+             xmlns:blxf="clr-namespace:LibXF.Controls.BindableLayout;assembly=LibXF.Controls"
+             xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+             xmlns:local="clr-namespace:LevelItUp.XamarinForms"
+             x:Class="LevelItUp.XamarinForms.BuildGridPage"
+             mvx:Bi.nd="Title Name"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="CHead">
+                <StackLayout>
+                    <Label mvx:Bi.nd="Text Data.Name;IsVisible !Data.Sub;" HorizontalTextAlignment="Center" BackgroundColor="#CCCCCC" Margin="2,0,2,0"/>
+                    <Label mvx:Bi.nd="Text Data.Name;IsVisible Data.Sub;" 
+                       HeightRequest="120"  WidthRequest="120" Margin="-46,0,-44,5" 
+                       Rotation="-90" AnchorX="0.5"  AnchorY="0.5"
+                       HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
+                </StackLayout>
+            </DataTemplate>
+            <lxf:TypeTemplateSelector x:Key="MCell">
+                <lxf:TypeTemplateSelector.Default>
+                    <DataTemplate>
+                        <lxf:TapLabel 
+                            mvx:Bi.nd="Text Data.Amount; BackgroundColor SelectedColor(Data.IsSelected);
+                                       Command Data.Tap; CommandParameter Data;"
+                            Margin="1" VerticalOptions="Fill" HorizontalOptions="Fill" 
+                            HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                    </DataTemplate>
+                </lxf:TypeTemplateSelector.Default>
+                <lxf:TypeTemplateSelector.Mappings>
+                    <lxf:TypeTemplate x:Type="{x:Type blxf:Gap}">
+                        <lxf:TypeTemplate.Template>
+                            <DataTemplate>
+                                <Grid mvx:Bi.nd="IsVisible Bool(Data.Below)"  VerticalOptions="End" HorizontalOptions="Center" Padding="3,0" BackgroundColor="#CCCCCC" Margin="2,0">
+                                    <Label HorizontalTextAlignment="Center" Text="Level" />
+                                </Grid>
+                            </DataTemplate>
+                        </lxf:TypeTemplate.Template>>
+                    </lxf:TypeTemplate>
+                </lxf:TypeTemplateSelector.Mappings>
+            </lxf:TypeTemplateSelector>
+            <DataTemplate x:Key="RHead">
+                <Grid>
+                    <lxf:TapLabel VerticalOptions="Center" HorizontalOptions="Start" BackgroundColor="Transparent" 
+                                  mvx:Bi.nd="Command Data.StatusTap; CommandParameter Data.Status; Text Data.Icon;"/>
+                    <Label mvx:Bi.nd="Text Data.Level" VerticalOptions="Center" HorizontalOptions="End"/>
+                </Grid>
+            </DataTemplate>
+            <local:cib x:Key="cib"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <blxf:BindableGrid mvx:Bi.nd="ItemsSource Cells; RowHeaders RHeaders; ColumnHeaders CHeaders;" 
+                                          FrozenHeaders="True" 
+                                          RowHeadersTemplate="{StaticResource RHead}"
+                                          ColumnHeadersTemplate="{StaticResource CHead}"
+                                          ItemTemplate="{StaticResource MCell}"
+                                          CellInfo="{StaticResource cib}"
+                                          RenderTaskFailure="MultiRenderFailure"
+                                          UIDispatcher="{StaticResource UId}"/>
+        <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="Start">
+            <Label Text="Chain" VerticalOptions="Center"/>
+            <Switch mvx:Bi.nd="IsToggled ChainChange" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="End">
+            <Button mvx:Bi.nd="Command Decrease; IsEnabled CanDecrease" Text="➖" />
+            <Button mvx:Bi.nd="Command Increase; IsEnabled CanIncrease" Text="➕" />
+        </StackLayout>
+        <TemplatedView ControlTemplate="{StaticResource StatusModalPopup}" Grid.RowSpan="2"/>
+    </Grid>
+</ContentPage>

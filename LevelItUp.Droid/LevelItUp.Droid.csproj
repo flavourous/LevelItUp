@@ -59,6 +59,9 @@
     <Reference Include="FormsViewGroup, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.2.5.0.280555\lib\MonoAndroid10\FormsViewGroup.dll</HintPath>
     </Reference>
+    <Reference Include="LibXF.Controls, Version=1.0.2.58, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibXF.Controls.1.0.2.58\lib\netstandard1.4\LibXF.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AppCenter.1.4.0\lib\MonoAndroid403\Microsoft.AppCenter.dll</HintPath>
     </Reference>

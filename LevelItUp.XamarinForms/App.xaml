@@ -19,6 +19,23 @@
                     </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
+            <ControlTemplate x:Key="StatusModalPopup">
+                <Frame
+                    BindingContext="{TemplateBinding Parent.BindingContext}" 
+                    OutlineColor="DarkGray"
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" 
+                    MinimumHeightRequest="150"
+                    MinimumWidthRequest="400"
+                    BackgroundColor="#FFFFFF"
+                    mvx:Bi.nd="IsVisible Bool(StatusModal)"
+                    >
+                    <StackLayout>
+                        <Label Margin="20,5" mvx:Bi.nd="Text StatusModal"/>
+                        <Button mvx:Bi.nd="Command ClosePopup;" Margin="20,0,20,5" HorizontalOptions="Center" Text="Close"/>
+                    </StackLayout>
+                </Frame>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </m:MvxFormsApplication>

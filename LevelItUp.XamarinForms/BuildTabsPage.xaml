@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxTabbedPage  x:TypeArguments="viewModels:BuildViewModel" 
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:local="clr-namespace:LevelItUp.XamarinForms"
+                      xmlns:core="clr-namespace:LevelItUp.Core;assembly=LevelItUp.Core"
+                      xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+                      xmlns:viewModels="clr-namespace:LevelItUp.Core.ViewModels;assembly=LevelItUp.Core"
+                      xmlns:lxf="clr-namespace:LibXF.Controls;assembly=LibXF.Controls"
+                      mvx:Bi.nd="Title Format('{1} Build: {0}', Name, Game); ItemsSource ParameterTypes"
+                      x:Name="BuildRootView"
+                      x:Class="LevelItUp.XamarinForms.BuildTabsPage">
+    <views:MvxTabbedPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="DFail">
+                <ContentPage Title="SAAAD">
+                    <Label Text="default sads"/>
+                </ContentPage>
+            </DataTemplate>
+        </ResourceDictionary>
+    </views:MvxTabbedPage.Resources>
+    <views:MvxTabbedPage.ItemTemplate>
+        <lxf:TypeTemplateSelector Default="{StaticResource DFail}">
+            <!--<lxf:TypeTemplate DataType="{x:Type viewModels:MultiParamTypeViewModel}" ViewType ="{x:Type local:BuildGridPage}"/>-->
+            <lxf:TypeTemplate DataType="{x:Type viewModels:BinaryParamTypeViewModel}" ViewType ="{x:Type local:BuildBinaryPage}"/>
+        </lxf:TypeTemplateSelector>
+    </views:MvxTabbedPage.ItemTemplate>
+</views:MvxTabbedPage>

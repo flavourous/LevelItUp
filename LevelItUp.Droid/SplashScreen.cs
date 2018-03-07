@@ -20,7 +20,6 @@ namespace LevelItUp.Droid
 
         protected override void OnStart()
         {
-#error is this correct?
             XamarinForms.App.StartAppCenter();
             base.OnStart();
         }
