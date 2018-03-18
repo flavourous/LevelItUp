@@ -73,18 +73,12 @@ namespace LevelItUp.Core.ViewModels
             var plk = oprms.ToDictionary(x => x.Name);
             Cells = Enumerable.Range(1, t.Game.MaxLevel)
                                .Select(l =>
-                                    prm.Select(x => new LevelParamViewModel(dal, plk[x.Name], l, manager.build, tapCommand ))
+                                    prm.Select(x => new LevelParamViewModel(dal, plk[x.Name], l, manager.build, tapCommand))
                                        .ToList() as IList<LevelParamViewModel>
                                 )
                                 .ToList();
         }
 
-        public class CHVM
-        {
-            public bool Sub { get; set; }
-            public String Name { get; set; }
-            public int CSpan { get; set; }
-        }
 
         // Cell commands 
         private LevelParamViewModel tappedCell;
@@ -101,5 +95,12 @@ namespace LevelItUp.Core.ViewModels
         // Data
         public IList<IList<LevelParamViewModel>> Cells { get; set; }
         public IList<IList<CHVM>> CHeaders { get; set; }
+    }
+
+    public class CHVM
+    {
+        public bool Sub { get; set; }
+        public String Name { get; set; }
+        public int CSpan { get; set; }
     }
 }

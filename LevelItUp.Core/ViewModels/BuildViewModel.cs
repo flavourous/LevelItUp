@@ -23,7 +23,7 @@ namespace LevelItUp.Core.ViewModels
             manager = new BuildDefinitionManager(dal, build.Game, build);
             ParameterTypes = new MvxObservableCollection<ParamTypeViewModel>(dal.Get<BuildParameterType>()
                               .Where(x => x.Game.id == build.Game.id)
-                              .Select(GetVM));
+                              .Select(GetVM)).Skip(1).Take(1).ToList();
         }
         ParamTypeViewModel GetVM(BuildParameterType t)
         {

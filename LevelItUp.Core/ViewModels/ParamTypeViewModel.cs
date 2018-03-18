@@ -11,9 +11,6 @@ using System.Threading.Tasks;
 
 namespace LevelItUp.Core.ViewModels
 {
-    public class StatusVM : MvxViewModel
-    {
-    }
     public abstract class ParamTypeViewModel : MvxViewModel
     {
         protected readonly FakeDAL dal;
@@ -136,15 +133,6 @@ namespace LevelItUp.Core.ViewModels
             );
         }
 
-        public class RHVM : MvxNotifyPropertyChanged
-        {
-            public int Level { get; set; }
-            private String status;
-            public string Status { get => status; set => this.RaiseAndSetIfChanged(ref status, value); }
-            private String icon;
-            public string Icon { get => icon; set => this.RaiseAndSetIfChanged(ref icon, value); }
-            public IMvxCommand<String> StatusTap { get; set; }
-        }
 
         private String statusModal = null;
         public string StatusModal { get => statusModal; set => this.RaiseAndSetIfChanged(ref statusModal, value); }
@@ -153,5 +141,14 @@ namespace LevelItUp.Core.ViewModels
         public IMvxCommand ClosePopup { get => closePopup; set => this.RaiseAndSetIfChanged(ref closePopup, value); }
 
         public IList<IList<RHVM>> RHeaders { get; set; }
+    }
+    public class RHVM : MvxNotifyPropertyChanged
+    {
+        public int Level { get; set; }
+        private String status;
+        public string Status { get => status; set => this.RaiseAndSetIfChanged(ref status, value); }
+        private String icon;
+        public string Icon { get => icon; set => this.RaiseAndSetIfChanged(ref icon, value); }
+        public IMvxCommand<String> StatusTap { get; set; }
     }
 }

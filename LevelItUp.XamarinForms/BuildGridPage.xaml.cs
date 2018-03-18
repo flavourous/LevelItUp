@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using LevelItUp.Core.ViewModels;
+using LibXF.Controls.BindableGrid;
+using System.Collections;
 
 namespace LevelItUp.XamarinForms
 {
@@ -18,44 +19,30 @@ namespace LevelItUp.XamarinForms
 		{
             InitializeComponent ();
 		}
-        public void MultiRenderFailure(Exception e)
-        {
-            Device.BeginInvokeOnMainThread(() => throw e);
-        }
-    }
-
-    public class UIDispatcher : ITimedDispatcher
-    {
-        readonly TimedDispatcher d = new TimedDispatcher(Device.BeginInvokeOnMainThread);
-        public Task<Task> Add(Action t) => d.Add(t);
-        public Task<Task<T>> Add<T>(Func<T> t) => d.Add(t);
-        public void Dispose() => d.Dispose();
-    }
-
-    public class cib : CellInfoBinder
-    {
-
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            ColumnSpan = 1;
-            if (BindingContext is ParamTypeViewModel.RHVM)
-            {
-                Height = 30;
-                Width = 50;
-            }
-            else if (BindingContext is MultiParamTypeViewModel.CHVM cv)
-            {
-                Width = cv.CSpan == 1 ? -1 : 0;
-                Height = cv.CSpan == 1 ? -1 : -1;
-                ColumnSpan = cv.CSpan;
-            }
-            else if (BindingContext is Gap)
-            {
-                Width = 50;
-                Height = 0;
-            }
-            else Width = Height = 30;
         }
+    }
+    public class MCellInfo : ICellInfoManager
+    {
+        public double GetColumnmWidth(int col, IList<IList> src)
+        {
+            var fel = src?.FirstOrDefault()?.Cast<Object>()?.ElementAtOrDefault(col);
+            if(fel is RHVM) return 50;
+            else return 30;
+        }
+
+        public double GetRowHeight(int row, IList<IList> src)
+        {
+            var fel = src?.ElementAtOrDefault(row)?.Cast<Object>()?.FirstOrDefault();
+            if(fel is RHVM) return 30;
+            else if(fel is CHVM fc) return fc.Sub ? 120 : 30;
+            else return 30;
+        }
+
+        public int GetColumnSpan(object cellData) => cellData is CHVM c ? c.CSpan : 1;
+
+        public int GetRowSpan(object cellData) => 1;
     }
 }

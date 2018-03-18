@@ -22,7 +22,7 @@
     </views:MvxTabbedPage.Resources>
     <views:MvxTabbedPage.ItemTemplate>
         <lxf:TypeTemplateSelector Default="{StaticResource DFail}">
-            <!--<lxf:TypeTemplate DataType="{x:Type viewModels:MultiParamTypeViewModel}" ViewType ="{x:Type local:BuildGridPage}"/>-->
+            <lxf:TypeTemplate DataType="{x:Type viewModels:MultiParamTypeViewModel}" ViewType ="{x:Type local:BuildGridPage}"/>
             <lxf:TypeTemplate DataType="{x:Type viewModels:BinaryParamTypeViewModel}" ViewType ="{x:Type local:BuildBinaryPage}"/>
         </lxf:TypeTemplateSelector>
     </views:MvxTabbedPage.ItemTemplate>
