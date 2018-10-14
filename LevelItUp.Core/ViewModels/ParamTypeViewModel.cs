@@ -1,11 +1,9 @@
 ﻿using LevelItUp.Model;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +20,7 @@ namespace LevelItUp.Core.ViewModels
             this.manager = manager;
             this.t = t;
             Name = t.Name;
+            Type = GetType().Name;
 
             var Popup = new MvxCommand<string>(s => StatusModal = s);
             ClosePopup = new MvxCommand(() => StatusModal = null);
@@ -37,6 +36,7 @@ namespace LevelItUp.Core.ViewModels
             manager.ParameterChanged += EvaluateStatsAroundLevel;
         }
 
+        public String Type { get; set; }
         public String Name { get; set; }
         public int id { get { return t.id; } }
 

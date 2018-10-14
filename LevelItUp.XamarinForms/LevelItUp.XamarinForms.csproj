@@ -1,27 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81</PackageTargetFallback>
     <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE;NETSTANDARD1_4</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
-
+  
   <ItemGroup>
+    <PackageReference Include="LibXF.Controls" Version="1.0.3.121" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Distribute" Version="1.4.0" />
-    <PackageReference Include="MvvmCross" Version="5.6.3" />
-    <PackageReference Include="MvvmCross.Forms" Version="5.6.3" />
+    <PackageReference Include="MvvmCross" Version="6.2.1" />
+    <PackageReference Include="MvvmCross.Forms" Version="6.2.1" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
+    <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\LibXF\LibXF.Controls\LibXF.Controls.csproj" />
     <ProjectReference Include="..\LevelItUp.Core\LevelItUp.Core.csproj" />
   </ItemGroup>
 

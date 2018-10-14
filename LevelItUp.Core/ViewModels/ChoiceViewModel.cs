@@ -1,8 +1,7 @@
-﻿using LevelItUp.Model;
-using MvvmCross.Core.ViewModels;
+﻿using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LevelItUp.Core.ViewModels
 {

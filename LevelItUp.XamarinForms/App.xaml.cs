@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xamarin.Forms;
-using MvvmCross.Forms.Platform;
-using Microsoft.AppCenter;
+﻿using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-
+using MvvmCross.Forms.Core;
 
 namespace LevelItUp.XamarinForms
 {
@@ -44,5 +38,6 @@ namespace LevelItUp.XamarinForms
         {
             // Handle when your app resumes
         }
+
     }
 }

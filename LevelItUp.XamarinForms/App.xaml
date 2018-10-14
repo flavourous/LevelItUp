@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<m:MvxFormsApplication xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<m:MvxFormsApplication xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:m="clr-namespace:MvvmCross.Forms.Platform;assembly=MvvmCross.Forms"
+             xmlns:m="clr-namespace:MvvmCross.Forms.Core;assembly=MvvmCross.Forms"
              xmlns:l="clr-namespace:LevelItUp.XamarinForms"
              xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
              xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"

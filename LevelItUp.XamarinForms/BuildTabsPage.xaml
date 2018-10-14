@@ -14,9 +14,10 @@
     <views:MvxTabbedPage.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="DFail">
-                <ContentPage Title="SAAAD">
-                    <Label Text="default sads"/>
-                </ContentPage>
+                <views:MvxContentPage mvx:Bi.nd="Title Format('{0}', Name)">
+                    <Label mvx:Bi.nd="Text Format('We do not have a view to dislay this build parameter of type {0}', Type)" 
+                           VerticalOptions="Center" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
+                </views:MvxContentPage>
             </DataTemplate>
         </ResourceDictionary>
     </views:MvxTabbedPage.Resources>

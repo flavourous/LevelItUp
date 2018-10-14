@@ -1,12 +1,9 @@
-﻿using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
 using LevelItUp.Model;
-using System.Threading.Tasks;
+using MvvmCross.ViewModels;
+using MvvmCross.Navigation;
+using MvvmCross.Commands;
 
 namespace LevelItUp.Core.ViewModels
 {

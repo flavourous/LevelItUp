@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LevelItUp.Model
+﻿namespace LevelItUp.Model
 {
     public static class d_Underrail
     {

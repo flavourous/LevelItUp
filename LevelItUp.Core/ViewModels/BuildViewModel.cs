@@ -1,15 +1,20 @@
 ﻿using LevelItUp.Model;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LevelItUp.Core.ViewModels
 {
     public class BuildViewModel : MvxViewModel
     {
+        class Lolmodek : ParamTypeViewModel
+        {
+            public Lolmodek(FakeDAL dal, BuildParameterType t, BuildDefinitionManager manager) : base(dal, t, manager)
+            {
+            }
+        }
         readonly FakeDAL dal;
         public readonly Build build;
         readonly BuildDefinitionManager manager;
@@ -23,7 +28,7 @@ namespace LevelItUp.Core.ViewModels
             manager = new BuildDefinitionManager(dal, build.Game, build);
             ParameterTypes = new MvxObservableCollection<ParamTypeViewModel>(dal.Get<BuildParameterType>()
                               .Where(x => x.Game.id == build.Game.id)
-                              .Select(GetVM)).Skip(1).Take(1).ToList();
+                              .Select(GetVM)).Concat(new[] { new Lolmodek(dal, new BuildParameterType { Game = build.Game, Name = "HAHA" }, manager) }).ToList();
         }
         ParamTypeViewModel GetVM(BuildParameterType t)
         {

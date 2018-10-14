@@ -1,10 +1,10 @@
 ﻿using LevelItUp.Model;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LevelItUp.Core.ViewModels
@@ -31,7 +31,7 @@ namespace LevelItUp.Core.ViewModels
             NewBuildCommand = new MvxAsyncCommand(async () =>
             {
                 Busy = true;
-                RaisePropertyChanged("Busy");
+                await RaisePropertyChanged("Busy");
                 var bvm = await Task.Run(() =>
                 {
                     var build = new Build { Name = "New Build", Game = game };
@@ -40,7 +40,7 @@ namespace LevelItUp.Core.ViewModels
                 });
                 builds.Add(bvm);
                 Busy = false;
-                RaisePropertyChanged("Busy");
+                await RaisePropertyChanged("Busy");
                 await navigationService.Navigate(bvm);
             });
 
